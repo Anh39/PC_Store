@@ -1,0 +1,14 @@
+{
+    "id": 1,
+    "role": "Customer",
+    "token": "abcde",
+    "email": "abcde@gmail.com",
+    "password": "12345",
+    "name": "abc",
+    "birthday": "2020-1-4",
+    "phone": "b",
+    "gender": "c",
+    "address": "d",
+    "avatar": "e",
+    "card": "f"
+}

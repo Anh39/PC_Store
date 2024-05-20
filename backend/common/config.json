@@ -1,0 +1,18 @@
+{
+    "server" : {
+        "host" : "localhost",
+        "port" : 8000
+    },
+    "database" : {
+        "host" : "localhost",
+        "port" : 8001
+    },
+    "ai" : {
+        "host" : "localhost",
+        "port" : 8002
+    },
+    "react" : {
+        "host" : "localhost",
+        "port" : 8080
+    }
+}
