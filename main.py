@@ -1,4 +1,3 @@
-from backend.database.server import DatabaseServer
+from backend.server_hub import start
 
-db_sv = DatabaseServer()
-db_sv.start()
+start()
