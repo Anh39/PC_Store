@@ -7,6 +7,7 @@ from datetime import datetime,date
 class MapSchema(BaseSchema):
     __tablename__ = 'map'
     key : Mapped[str] = mapped_column(primary_key=True)
+    value : Mapped[str] = mapped_column(nullable=True)
     
     product = relationship('ProductSchema',back_populates=None)
     product_id = Column(Integer,ForeignKey('product.id'),primary_key=True)

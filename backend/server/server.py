@@ -6,6 +6,7 @@ from .product import ProductManager
 from .user import UserManager
 from .voucher import VoucherManager
 from .validator import UserValidator
+from fastapi.middleware.cors import CORSMiddleware
 
 class FastAPIServer:
     def __init__(self) -> None:
@@ -22,6 +23,16 @@ class FastAPIServer:
         self.user = UserManager(self.validator)
         self.voucher = VoucherManager()
         
+        self.app.add_middleware(
+            CORSMiddleware,
+            allow_origins=[
+                'http://127.0.0.1:3000',
+                'http://localhost:3000'
+            ],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"]
+        )
         
     def _add_route(self):
         self.app.add_api_route('/login',self.user.login,methods=['POST'],tags=['User'])
@@ -30,9 +41,9 @@ class FastAPIServer:
         self.app.add_api_route('/user',self.user.change_user_info,methods=['PATCH'],tags=['User'])
         self.app.add_api_route('/user',self.user.get_user_info,methods=['GET'],tags=['User'])
         self.app.add_api_route('/user',self.user.delete_user,methods=['DELETE'],tags=['User'])
-        self.app.add_api_route('/cart',self.user.get_cart,methods=['GET'],tags=['User'])
-        self.app.add_api_route('/vouchers',self.user.get_vouchers,methods=['GET'],tags=['User'])
-        self.app.add_api_route('/orders',self.user.get_orders,methods=['GET'],tags=['User'])
+        self.app.add_api_route('/my_cart',self.user.get_cart,methods=['GET'],tags=['User'])
+        self.app.add_api_route('/my_vouchers',self.user.get_vouchers,methods=['GET'],tags=['User'])
+        self.app.add_api_route('/my_orders',self.user.get_orders,methods=['GET'],tags=['User'])
         
         self.app.add_api_route('/product',self.product.get_product,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/products',self.product.search_products,methods=['GET'],tags=['Product'])

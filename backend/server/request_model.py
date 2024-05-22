@@ -5,14 +5,14 @@ class LoginRequest(BaseModel):
     password : str
     
 class RegisterRequest(LoginRequest):
-    username : str
+    username : str | None
     
 class ResetPasswordRequest(BaseModel):
     email : str | None
     code : str | None
     
 class ChangeUserInfoRequest(BaseModel):
-    password : str
+    confirm_password : str
     data : dict[str,object]
     
 class ChangeCartRequest(BaseModel):

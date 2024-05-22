@@ -20,14 +20,14 @@ class OrderSchema(BaseSchema):
     _blacklist = ['owner','items']
     def model_dump(self) -> dict[str, object]:
         result = super().model_dump()
-        result = self.convert_datetime(result,'time_created')
-        result = self.convert_datetime(result,'time_completed')
+        result = self.revert_datetime(result,'time_created')
+        result = self.revert_datetime(result,'time_completed')
         return result
     @classmethod
     def model_validate(cls, data: dict[str, object]) -> BaseSchema:
         result = super()._model_validate(data,OrderSchema)
-        result.revert_datetime('time_created')
-        result.revert_datetime('time_completed')
+        result.convert_datetime('time_created')
+        result.convert_datetime('time_completed')
         return result
 
 from .user import UserSchema

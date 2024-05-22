@@ -29,12 +29,12 @@ class UserSchema(BaseSchema):
     _black_list = ['have_cart','have_orders','have_ratings','have_vouchers','have_posts']
     def model_dump(self) -> dict[str, object]:
         result = super().model_dump()
-        self.revert_date('birthday')
+        self.convert_date('birthday')
         return result
     @classmethod
     def model_validate(cls, data: dict[str, object]) -> 'UserSchema':
         result : UserSchema = cls._model_validate(data,UserSchema)
-        result = cls.convert_date(result,'birthday')
+        result = cls.revert_date(result,'birthday')
         return result
     def model_change(self, data: dict[str, object]) -> 'UserSchema':
         return self._model_change(data,UserSchema)
