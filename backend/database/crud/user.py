@@ -7,37 +7,35 @@ from fastapi import Request,Response
 from sqlalchemy import Engine,select,delete,update
 
 class UserCRUD(BaseCRUD):
-    async def create_user(self,data : dict) -> Response:
+    async def create(self,data : dict) -> Response:
         with Session(self.engine) as session:
-            print(UserSchema.get_test().model_dump())
             user = UserSchema.model_validate(data)
             session.add(user)
-            session.commit()
-            return Response(status_code=200)
-    async def update_user(
+            try:
+                session.commit()
+                return Response(status_code=200)
+            except:
+                return Response(status_code=404)
+    async def update(
             self,
             data : dict,
             token : str | None = None,
-            id : str | None = None
+            password : str | None = None
         ) : 
         with Session(self.engine) as session:
             query = update(UserSchema)
-            if (id != None):
-                query = query.where(UserSchema.id == id)
+            if (password != None):
+                query = query.where(UserSchema.password == password)
             if (token != None):
                 query = query.where(UserSchema.token == token)
-            values = list(data.items())
-            data = {'name' : 'abcde'}
-            query = query.values(name='abcdef',id=5)
-            session.execute(query)
-            # result = None
-            # for result in results:
-            #     result = result[0]
-            #     break
-            # result.model_change(data)
+            query = query.values(data)
+            result = session.execute(query)
             session.commit()
-            return Response(status_code=200)
-    async def delete_user(
+            if (result.rowcount > 0):
+                return Response(status_code=200)
+            else:
+                return Response(status_code=404)
+    async def delete(
             self,
             token : str | None = None,
             id : str | None = None
@@ -48,10 +46,13 @@ class UserCRUD(BaseCRUD):
                 query = query.where(UserSchema.id == id)
             if (token != None):
                 query = query.where(UserSchema.token == token)
-            session.execute(query)
+            result = session.execute(query)
             session.commit()
-            return Response(status_code=200)
-    async def get_user(
+            if (result.rowcount > 0):
+                return Response(status_code=200)
+            else:
+                return Response(status_code=404)
+    async def get(
             self,
             id : str | None = None,
             token : str | None = None,
@@ -75,4 +76,74 @@ class UserCRUD(BaseCRUD):
             response_results = []
             for result in results:
                 response_results.append(result[0].model_dump())
+            return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)
+
+    async def get_cart(
+            self,
+            token : str | None = None
+        ) -> Response:
+        with Session(self.engine) as session:
+            query = select(UserSchema)
+            if (token != None):
+                query = query.where(UserSchema.token == token)
+            results = session.execute(query)
+            response_results = {}
+            for result in results:
+                cart = result[0].have_cart
+                if (cart == []):
+                    response_results = {}
+                else:
+                    response_results = cart.model_validate()
+                break
+            return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)
+        
+    async def get_order(
+            self,
+            token : str | None = None
+        ) -> Response:
+        with Session(self.engine) as session:
+            query = select(UserSchema)
+            if (token != None):
+                query = query.where(UserSchema.token == token)
+            results = session.execute(query)
+            response_results = []
+            for result in results:
+                carts = result[0].have_orders
+                for cart in carts:
+                    response_results.append(cart.model_validate())
+                break
+            return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)
+        
+    async def get_voucher(
+            self,
+            token : str | None = None
+        ) -> Response:
+        with Session(self.engine) as session:
+            query = select(UserSchema)
+            if (token != None):
+                query = query.where(UserSchema.token == token)
+            results = session.execute(query)
+            response_results = []
+            for result in results:
+                vouchers = result[0].have_vouchers
+                for voucher in vouchers:
+                    response_results.append(voucher.model_validate())
+                break
+            return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)
+        
+    async def get_rating(
+            self,
+            token : str | None = None
+        ) -> Response:
+        with Session(self.engine) as session:
+            query = select(UserSchema)
+            if (token != None):
+                query = query.where(UserSchema.token == token)
+            results = session.execute(query)
+            response_results = []
+            for result in results:
+                ratings = result[0].have_orders
+                for rating in ratings:
+                    response_results.append(rating.model_validate())
+                break
             return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)

@@ -13,7 +13,7 @@ class VoucherSchema(BaseSchema):
     category_apply : Mapped[str]
     description : Mapped[str]
     
-    owners = relationship('UserSchema',secondary=user_voucher_association,back_populates='have_voucher')
+    owners = relationship('UserSchema',secondary=user_voucher_association,back_populates='have_vouchers')
     _blacklist = []
     @classmethod
     def get_test(cls) -> 'VoucherSchema':

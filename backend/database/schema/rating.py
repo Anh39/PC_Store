@@ -10,8 +10,8 @@ class RatingSchema(BaseSchema):
     value : Mapped[float]
     
     user_id = Column(Integer,ForeignKey('user.id'))
-    owner = relationship('UserSchema',back_populates='have_rating')
-    product = relationship('ProductSchema',back_populates='have_rating')
+    owner = relationship('UserSchema',back_populates='have_ratings')
+    rated_products = relationship('ProductSchema',back_populates='have_ratings')
     
     _blacklist = ['owner','product']
     @classmethod
