@@ -26,14 +26,14 @@ class VoucherSchema(BaseSchema):
         return voucher
     def model_dump(self) -> dict[str, object]:
         result = super().model_dump()
-        result = self.convert_datetime(result,'received_time')
-        result = self.convert_datetime(result,'expire_time')
+        result = self.revert_datetime(result,'received_time')
+        result = self.revert_datetime(result,'expire_time')
         return result
     @classmethod
     def model_validate(cls, data: dict[str, object]) -> BaseSchema:
         result = super()._model_validate(data,VoucherSchema)
-        result.revert_datetime('received_time')
-        result.revert_datetime('expire_time')
+        result.convert_datetime('received_time')
+        result.convert_datetime('expire_time')
         return result
     
 from .user import UserSchema

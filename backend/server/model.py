@@ -6,6 +6,7 @@ class AuthenticationResponse(BaseModel):
         min_length=0,
         max_length=50
     )
+    role : str | None = 'Customer'
     @classmethod
     def get_test(cls):
         result = AuthenticationResponse(
@@ -69,11 +70,11 @@ class Cart(BaseModel):
         return result
 
 class Product(BaseModel):
-    id : int
+    id : int | None = None
     time_created : str
     time_modified : str
     price : float
-    infos : dict[str,object]
+    infos : dict[str,str]
     name : str
     ratings : list['Rating'] = []
     @classmethod

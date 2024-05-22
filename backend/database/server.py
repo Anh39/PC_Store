@@ -43,6 +43,9 @@ class DatabaseServer:
         self.app.add_api_route('/user/voucher',self.cruds['user'].get_voucher,methods=['GET'],tags=['user_relation'])
         self.app.add_api_route('/user/rating',self.cruds['user'].get_rating,methods=['GET'],tags=['user_relation'])
         
+        self.app.add_api_route('/product/full',self.cruds['product'].full_create,methods=['POST'],tags=['product'])
+        self.app.add_api_route('/product/full',self.cruds['product'].full_get,methods=['GET'],tags=['product'])
+
         
     def start(self):
         self._add_route()

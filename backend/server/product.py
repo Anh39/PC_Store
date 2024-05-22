@@ -6,20 +6,30 @@ from .api.product import ProductDBAPI
 get_token = Header
 class ProductManager:
     def __init__(self,validator : UserValidator) -> None:
-        self.db_api : ProductDBAPI = ProductDBAPI()
-        self.db_api.start()
+        self.product_api : ProductDBAPI = ProductDBAPI()
+        self.product_api.start()
         self.validator = validator
-    async def create_product(self,data : Product,admin_token : str = get_token(None)) -> bool:
+    async def create_product(self,data : Product,admin_token : str = get_token(None)) -> None | int:
         validate_result = await self.validator.admin_validate(admin_token)
         if (validate_result):
-            result = await self.db_api.create_product(data.model_dump())
+            dict_data = data.model_dump()
+            dict_data.pop('id')
+            result = await self.product_api.create_product(dict_data)
             if (result):
-                return True
-        return False
+                return result
+        return None
     async def search_products(self,data : dict) -> list[Product]:
         return [Product.get_test()]
-    async def get_product(self,data : dict) -> Product:
-        return Product.get_test()
+    async def get_product(self,id : int,token : str | None = get_token()):
+        validate_result = await self.validator.guest_validate(token)
+        if (validate_result):
+            dict_data = {
+                "id" : id
+            }
+            result = await self.product_api.get_product(dict_data)
+            if (result):
+                return result
+        return False
     async def recommend_products(self,data : dict) -> list[Product]:
         return [Product.get_test()]
     async def change_product(self,data : dict) -> Product:

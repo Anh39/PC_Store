@@ -7,26 +7,26 @@ class BaseSupport:
 
 class BaseSchema(DeclarativeBase,BaseSupport):
     @classmethod
-    def convert_date(cls,data : 'BaseSchema',key : str) -> 'BaseSchema':
-        value = getattr(data,key,None)
+    def revert_date(cls,data : dict,key : str) -> dict:
+        value = data.get(key,None)
         try:
             if (value != None):
                 value = datetime.datetime.strftime(value,'%Y-%m-%d')
-                setattr(data,key,value)
+                data[key] = value
             return data
         except Exception as e:
             raise Exception('Time parsing exception')
     @classmethod
-    def convert_datetime(cls,data : 'BaseSchema',key : str) -> 'BaseSchema':
-        value = getattr(data,key,None)
+    def revert_datetime(cls,data : dict,key : str) -> dict:
+        value = data.get(key,None)
         try:
             if (value != None):
                 value = datetime.datetime.strftime(value,'%Y-%m-%d %H:%M:%S')
-                setattr(data,key,value)
+                data[key] = value
             return data
         except Exception as e:
             raise Exception('Time parsing exception')
-    def revert_date(self,key : str):
+    def convert_date(self,key : str):
         value = getattr(self,key,None)
         try:
             if (value != None):
@@ -34,7 +34,7 @@ class BaseSchema(DeclarativeBase,BaseSupport):
                 setattr(self,key,value)
         except Exception as e:
             raise Exception('Time parsing exception')
-    def revert_datetime(self,key : str):
+    def convert_datetime(self,key : str):
         value = getattr(self,key,None)
         try:
             if (value != None):

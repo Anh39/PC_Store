@@ -11,9 +11,9 @@ class RatingSchema(BaseSchema):
     
     user_id = Column(Integer,ForeignKey('user.id'))
     owner = relationship('UserSchema',back_populates='have_ratings')
-    rated_products = relationship('ProductSchema',back_populates='have_ratings')
+    rated_product = relationship('ProductSchema',back_populates='have_ratings')
     
-    _blacklist = ['owner','product']
+    _blacklist = ['owner','rated_product']
     @classmethod
     def get_test(cls) -> 'RatingSchema':
         rating = RatingSchema()

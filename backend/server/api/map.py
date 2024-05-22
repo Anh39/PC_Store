@@ -7,13 +7,13 @@ from typing import Literal
 headers = {
     "Content-Type": "application/json"
 }
-class ProductDBAPI(BaseDBAPI):
-    async def get_product(
+class MapDBAPI(BaseDBAPI):
+    async def get_user(
         self,
         data : dict[str,object]
     ) -> dict[str,object]:
         try:
-            async with(self.session.get(url='/product/full',params = data,headers=headers)) as response:
+            async with(self.session.get(url='/user',params = data,headers=headers)) as response:
                 if (response.status == 200):
                     result = await response.json()
                     return result
@@ -25,12 +25,11 @@ class ProductDBAPI(BaseDBAPI):
     async def create_product(
         self,
         data : dict[str,object]
-    ) -> bool | int:
+    ) -> bool:
         try:
-            async with(self.session.post(url='/product/full',data = json.dumps(data),headers=headers)) as response:
+            async with(self.session.post(url='/product',data = json.dumps(data),headers=headers)) as response:
                 if (response.status == 200):
-                    result = await response.text()
-                    return int(result)
+                    return True
                 else:
                     return False
         except Exception as e:
@@ -73,22 +72,4 @@ class ProductDBAPI(BaseDBAPI):
         except Exception as e:
             print(e)
             return False
-    async def _get_user_relation(
-        self,
-        kind : Literal['order','cart','rating','voucher'],
-        token : str
-    ) -> dict[str,object] | list[dict[str,object]]:
-        try:
-            params = {
-                'token' : token
-            }
-            async with(self.session.get(url='/user/{}'.format(kind),params = params,headers=headers)) as response:
-                if (response.status == 200):
-                    result = await response.json()
-                    return result
-                else:
-                    print('ERR')
-        except Exception as e:
-            print(e)
-    
     
