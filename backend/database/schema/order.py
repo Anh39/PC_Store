@@ -15,7 +15,7 @@ class OrderSchema(BaseSchema):
     status : Mapped[str]
     
     user_id = Column(Integer,ForeignKey('user.id'))
-    owner = relationship('UserSchema',back_populates='have_order')
+    owner = relationship('UserSchema',back_populates='have_orders')
     items = relationship('OrderItemSchema',back_populates='in_order')
     _blacklist = ['owner','items']
     def model_dump(self) -> dict[str, object]:

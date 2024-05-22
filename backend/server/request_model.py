@@ -12,10 +12,8 @@ class ResetPasswordRequest(BaseModel):
     code : str | None
     
 class ChangeUserInfoRequest(BaseModel):
-    token : str
     password : str
     data : dict[str,object]
     
 class ChangeCartRequest(BaseModel):
-    token : str
     data : dict[str,object]

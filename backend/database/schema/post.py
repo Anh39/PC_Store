@@ -12,7 +12,7 @@ class PostSchema(BaseSchema):
     time_modified : Mapped[datetime]
     
     user_id = Column(Integer,ForeignKey('user.id'))
-    owner = relationship('UserSchema',back_populates='have_post')
+    owner = relationship('UserSchema',back_populates='have_posts')
     _blacklist = ['owner']
     def model_dump(self) -> dict[str, object]:
         result = super().model_dump()

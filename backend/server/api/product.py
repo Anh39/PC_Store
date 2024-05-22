@@ -2,12 +2,12 @@ from backend.common import common
 import aiohttp
 from .base import BaseDBAPI
 import json
-from ..model import User
+from ..model import Product
 from typing import Literal
 headers = {
     "Content-Type": "application/json"
 }
-class UserDBAPI(BaseDBAPI):
+class ProductDBAPI(BaseDBAPI):
     async def get_user(
         self,
         data : dict[str,object]
@@ -22,12 +22,12 @@ class UserDBAPI(BaseDBAPI):
         except Exception as e:
             print(e)
     
-    async def create_user(
+    async def create_product(
         self,
         data : dict[str,object]
     ) -> bool:
         try:
-            async with(self.session.post(url='/user',data = json.dumps(data),headers=headers)) as response:
+            async with(self.session.post(url='/product',data = json.dumps(data),headers=headers)) as response:
                 if (response.status == 200):
                     return True
                 else:
@@ -39,7 +39,7 @@ class UserDBAPI(BaseDBAPI):
         self,
         token : str,
         password : str,
-        data : dict[str,object]
+        data : Product
     ) -> bool:
         try:
             params = {
@@ -90,28 +90,4 @@ class UserDBAPI(BaseDBAPI):
         except Exception as e:
             print(e)
     
-    
-    async def get_user_voucher(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('order',token)
-    
-    async def get_user_cart(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('cart',token)
-    
-    async def get_user_voucher(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('voucher',token)
-    
-    async def get_user_rating(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('rating',token)
     
