@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProductDetail } from "../../../Services/productService";
-import { Flex, Tabs } from "antd";
+import { Button, Flex, Tabs } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../../actions/cart";
 
 function ProductDetail() {
 
     const params = useParams();
     const [product, setProduct] = useState();
+
+    const dispatch = useDispatch();
+    const cart = useSelector(state => state.cartReducer);
+
+    const handleAddToCart = () => {
+        if (cart.some(itemCart => itemCart.id === params.id)) {
+            // dispatch(updateQuantity(item.id));
+        } else {
+            dispatch(addToCart(params.id, params));
+        }
+    }
 
     useEffect(() => {
         const fetchAPI = async () => {
@@ -47,6 +60,9 @@ function ProductDetail() {
                             <p><strong>Hãng:</strong> {product.brand}</p>
                             <p><strong>Loại:</strong> {product.category}</p>
                             <p><strong>Còn lại:</strong> {product.stock}</p>
+
+                            <Button type="primary" >Mua ngay</Button>
+                            <Button onClick={handleAddToCart}>Thêm vào giỏ hàng</Button>
                         </div>
                     </Flex>
                 </>

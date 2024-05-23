@@ -3,7 +3,7 @@ import "./LayoutDefault.css";
 import Header from "./Header";
 import Footer from "./Footer";
 import Main from "./Main";
-import { getCookie } from "../helpers/cookie";
+import { getCookie } from "../../helpers/cookie";
 import { useSelector } from "react-redux";
 
 function LayoutDefault() {
