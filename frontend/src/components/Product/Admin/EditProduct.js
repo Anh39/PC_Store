@@ -1,25 +1,36 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
-import Swal from 'sweetalert2/dist/sweetalert2.js';
-import 'sweetalert2/src/sweetalert2.scss';
-import { editProduct } from "../../services/productService";
+import { Button, Form, Input, InputNumber, Modal, Select, Spin, notification } from "antd";
+import { editProduct } from "../../../Services/productService";
+import { EditOutlined } from "@ant-design/icons";
+import { getCategoryList } from "../../../Services/categoryService";
+
+const { Option } = Select;
 
 function EditProduct(props) {
     const { item, onReload } = props;
+    const [form] = Form.useForm();
     const [showModal, setShowModal] = useState(false);
+    const [api, contextHolder] = notification.useNotification();
     const [data, setData] = useState(item);
-    const [dataCategory, setDataCategory] = useState({});
+    const [dataCategory, setDataCategory] = useState([]);
+    const [spinning, setSpinning] = useState(false);
+
+    const rules = [
+        {
+            required: true,
+            message: "bắt buộc"
+        }
+    ];
+
     useEffect(() => {
         const fetchApi = async () => {
-            fetch("http://dummyjson.com/products/categories")
-                .then(res => res.json())
-                .then(data => {
-                    setDataCategory(data);
-                })
+            const category = await getCategoryList();
+            setDataCategory(category);
         }
 
         fetchApi();
-    });
+    }, []);
 
     const customStyles = {
         content: {
@@ -40,120 +51,103 @@ function EditProduct(props) {
         setShowModal(false);
     }
 
-    const handleChange = (e) => {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value
-        });
-    }
-
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        setSpinning(true);
         const result = await editProduct(item.id, data);
-        if (result) {
-            // console.log(data);
-            setShowModal(false);
-            onReload();
-            Swal.fire({
-                icon: "success",
-                title: "Cập nhật sản phẩm thành công",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        }
+        setTimeout(() => {
+            if (result) {
+                api.success({
+                    message: "Cập nhật sản phẩm thành công"
+                });
+                setShowModal(false);
+                onReload();
+            } else {
+                api.error({
+                    message: "Cập nhật phòng thất bại"
+                });
+            }
+            setSpinning(false);
+        }, 3000);
     }
     return (
         <>
-            <button onClick={openModal} required>Chỉnh sửa</button>
+            {contextHolder}
+            <Button type="primary" onClick={openModal}>
+                <EditOutlined />
+            </Button>
 
             <Modal
-                isOpen={showModal}
-                onRequestClose={closeModal}
+                open={showModal}
+                onCancel={closeModal}
                 style={customStyles}
-                contentLabel="Example Modal"
+                footer={null}
             >
-                <form onSubmit={handleSubmit}>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Tiêu đề</td>
-                                <td><input
-                                    type="text"
-                                    name="title"
-                                    onChange={handleChange}
-                                    value={data.title} />
-                                </td>
-                            </tr>
-                            {dataCategory.length > 0 && (
-                                <tr>
-                                    <td>Danh mục</td>
-                                    <td>
-                                        <select name="category" onChange={handleChange} value={data.category}>
-                                            {dataCategory.map((item, index) => (
-                                                <option key={index} value={item}>{item}</option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                </tr>
-                            )}
-                            <tr>
-                                <td>Giá</td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        name="price"
-                                        onChange={handleChange}
-                                        value={data.price}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Giảm giá</td>
-                                <td><input
-                                    type="text"
-                                    name="discountPercentage"
-                                    onChange={handleChange}
-                                    value={item.discountPercentage}
-                                />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Số lượng còn lại</td>
-                                <td><input
-                                    type="text"
-                                    name="stock"
-                                    onChange={handleChange}
-                                    value={data.stock}
-                                />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Đường dẫn ảnh</td>
-                                <td><input
-                                    type="text"
-                                    name="thumbnail"
-                                    onChange={handleChange}
-                                    value={data.thumbnail}
-                                /></td>
-                            </tr>
-                            <tr>
-                                <td>Mô tả</td>
-                                <td>
-                                    <textarea
-                                        rows={4}
-                                        name="description"
-                                        onChange={handleChange}
-                                        value={data.description}
-                                    ></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><button onClick={closeModal}>Hủy</button></td>
-                                <td><input type="submit" value="edit" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+                <Spin spinning={spinning} tip="Đang cập nhật">
+                    <Form
+                        layout="vertical"
+                        name="update-room"
+                        onFinish={handleSubmit}
+                        form={form}
+                        initialValues={data}
+                    >
+                        <Form.Item
+                            name="title"
+                            label="Tiêu đề"
+                        >
+                            <Input defaultValue={data.title} />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="price"
+                            label="Giá"
+                            rules={rules}
+                        >
+                            <InputNumber min={1} defaultValue={data.price} />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="discountPercentage"
+                            label="Giảm giá"
+                            rules={rules}
+                        >
+                            <InputNumber min={1} defaultValue={data.discountPercentage} />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="stock"
+                            label="Số lượng còn lại"
+                            rules={rules}
+                        >
+                            <InputNumber min={1} defaultValue={data.stock} />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="thumbnail"
+                            label="Đương dẫn ảnh"
+                        >
+                            <Input defaultValue={data.thumbnail} />
+                        </Form.Item>
+
+                        <Form.Item name="category" label="Danh mục">
+                            <Select defaultValue={data.category}>
+                                {dataCategory.map((item, index) => (
+                                    <Option key={index}>{item}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item
+                            name="description"
+                            label="Mô tả"
+                        >
+                            <Input.TextArea showCount maxLength={10000} />
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Button type="primary" htmlType="Submit" >Cập nhật</Button>
+                        </Form.Item>
+                    </Form>
+                </Spin>
             </Modal>
         </>
     )

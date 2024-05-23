@@ -1,24 +1,50 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
-import Swal from 'sweetalert2/dist/sweetalert2.js';
-import 'sweetalert2/src/sweetalert2.scss';
-import { getCategoryList } from "../../services/categoryService";
-import { createProduct } from "../../services/productService";
+import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd";
+import { getCategoryList } from "../../../Services/categoryService";
+import { createProduct } from "../../../Services/productService";
+
+const { Option } = Select;
 
 function CreateProduct(props) {
     const { onReload } = props;
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState({});
-    const [dataCategory, setDataCategory] = useState({});
+    const [dataCategory, setDataCategory] = useState([]);
+    const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const handleSubmit = async (data) => {
+        const result = await createProduct(data);
+        if (result) {
+            form.resetFields();
+            messageApi.open({
+                type: 'success',
+                content: "Tạo mới sản phẩm thành công"
+            });
+            onReload();
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: "Tạo phòng thất bại"
+            });
+        }
+    }
+
+    const rules = [
+        {
+            required: true,
+            message: "bắt buộc"
+        }
+    ];
 
     useEffect(() => {
         const fetchApi = async () => {
             const result = await getCategoryList();
+            console.log(result);
             setDataCategory(result);
         }
 
         fetchApi();
-    });
+    }, []);
 
     const customStyles = {
         content: {
@@ -38,86 +64,75 @@ function CreateProduct(props) {
     const closeModal = () => {
         setShowModal(false);
     }
-
-    const handleChange = (e) => {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value
-        });
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const result = await createProduct(data);
-        if (result) {
-            setShowModal(false);
-            onReload();
-            Swal.fire({
-                icon: "success",
-                title: "Bạn đã tạo mới thành công",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        }
-    };
     return (
         <>
-            <button onClick={openModal} required>Tạo sản phẩm mới</button>
+            {contextHolder}
+
+            <Button onClick={openModal} required>Tạo sản phẩm mới</Button>
 
             <Modal
-                isOpen={showModal}
-                onRequestClose={closeModal}
+                open={showModal}
+                onCancel={closeModal}
                 style={customStyles}
-                contentLabel="Example Modal"
             >
-                <form onSubmit={handleSubmit}>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Tiêu đề</td>
-                                <td><input type="text" name="title" onChange={handleChange} /></td>
-                            </tr>
-                            {dataCategory.length > 0 && (
-                                <tr>
-                                    <td>Danh mục</td>
-                                    <td>
-                                        <select name="category" onChange={handleChange}>
-                                            {dataCategory.map((item, index) => (
-                                                <option key={index} value={item}>{item}</option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                </tr>
-                            )}
-                            <tr>
-                                <td>Giá</td>
-                                <td><input type="text" name="price" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Giảm giá</td>
-                                <td><input type="text" name="price" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Số lượng còn lại</td>
-                                <td><input type="text" name="stock" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Đường dẫn ảnh</td>
-                                <td><input type="text" name="thumbnail" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Mô tả</td>
-                                <td>
-                                    <textarea rows={4} name="description" onChange={handleChange}></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><button onClick={closeModal}>Hủy</button></td>
-                                <td><input type="submit" value="create" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+                <Form layout="vertical" name="create-room" onFinish={handleSubmit} form={form}>
+                    <Form.Item
+                        name="name"
+                        label="Tiêu đề"
+                        rules={rules}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="price"
+                        label="Giá"
+                        rules={rules}
+                    >
+                        <InputNumber min={1} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="discountPercentage"
+                        label="Tỉ lệ giảm giá"
+                        rules={rules}
+                    >
+                        <InputNumber min={0} />
+                    </Form.Item>
+
+
+                    <Form.Item
+                        name="stock"
+                        label="Số lượng còn lại"
+                    >
+                        <InputNumber min={1} />
+                    </Form.Item>
+
+                    <Form.Item name="category" label="Danh mục">
+                        <Select>
+                            {dataCategory.map((item, index) => (
+                                <Option key={index}>{item}</Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                    
+                    <Form.Item
+                        name="thumbnail"
+                        label="Đường dẫn ảnh"
+                    >
+                        <Input.TextArea showCount maxLength={10000} />
+                    </Form.Item>
+                    <Form.Item
+                        name="description"
+                        label="Mô tả"
+                    >
+                        <Input.TextArea showCount maxLength={10000} />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="Submit" >Tạo mới</Button>
+                    </Form.Item>
+                </Form>
+                
             </Modal>
         </>
     )

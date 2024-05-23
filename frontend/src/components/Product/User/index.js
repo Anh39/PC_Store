@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { getProductList } from "../../Services/productService";
-import ProductItem from "./User/ProductItem";
-import "./Product.scss";
+import { getProductList } from "../../../Services/productService";
+import ProductItem from "./ProductItem";
+import "./DisplayProduct.scss";
 import { Col, Row } from "antd";
-// import { Row } from "antd";
 
 function Product() {
 
@@ -20,7 +19,7 @@ function Product() {
     return (
         <>
             <div className="product">
-                <Row gutter={[5, 5]}>
+                <Row gutter={[10, 20]}>
                     {product.map(item => (
                         <Col span={6}>
                             <ProductItem item={item} key={item.id} />
