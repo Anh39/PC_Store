@@ -30,10 +30,12 @@ export const getProductList = async (id) => {
         return []
     }
 }
-export const getProductDetail = async (id) => {
+export const getProductDetail = async (id) => { 
     const result = await get(`product/?id=${id}`)
     if (result != null) {
-        const data = await result.json();
+        let data = await result.json();
+        data = data[0];
+        data['images'] = [data['thumbnail']]
         return data;
     } else {
         return null
@@ -69,5 +71,16 @@ export const createProduct = async (option) => {
        return id
     } else {
         return null
+    }
+}
+
+export const getCategoryList = async () => {
+    // const result = await get("category");
+    const result = await get('product/category');
+    if (result != null) {
+        let data = await result.json();
+        return data;
+    } else {
+        return []
     }
 }

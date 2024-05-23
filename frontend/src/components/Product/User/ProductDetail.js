@@ -23,11 +23,7 @@ function ProductDetail() {
 
     useEffect(() => {
         const fetchAPI = async () => {
-            const response = await getProductDetail(params.id);
-            console.log(response);
-            // const data = {
-            //     ...response,
-            // };
+            const response = await getProductDetail(params.id); 
             setProduct(response);
         };
         fetchAPI();
@@ -38,7 +34,7 @@ function ProductDetail() {
         <>
             {product && (
                 <>
-                    <h1 style={{ margin: 20 }}>{product.title}</h1>
+                    <h1 style={{ margin: 20 }}>{product.name}</h1>
 
                     <Flex >
                         <div className="Tabs">
