@@ -6,14 +6,20 @@ class UserValidator:
         self.user_api.start()
         self.bypast = True
     async def validate(self,token : str ) -> bool: # Untest
+        if (self.bypast):
+            return True
         result = await self.user_api.get_user({
             'token' : token
         })
-        return len(result) > 0 or self.bypast
+        return len(result) > 0
     async def admin_validate(self,token : str) -> bool: # Untest
+        if (self.bypast):
+            return True
         result = await self.user_api.get_user({
             'token' : token
         })
-        return (len(result) > 0 and result[0]['role'] == 'Admin') or self.bypast
+        return (len(result) > 0 and result[0]['role'] == 'Admin') 
     async def guest_validate(self,token : str | None = None) -> bool:
-        return True or self.bypast
+        if (self.bypast):
+            return True
+        return True

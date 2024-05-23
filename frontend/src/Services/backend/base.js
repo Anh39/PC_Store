@@ -1,5 +1,5 @@
 import { getCookie } from "../helpers/cookie";
-const API_DOMAIN = "http://localhost:3000/"; // đổi tại đây
+const API_DOMAIN = "http://localhost:8000/"; // đổi tại đây
 
 export const get = async (path) => {
     const response = await fetch(API_DOMAIN + path,{

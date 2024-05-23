@@ -22,29 +22,31 @@ export const get_product = async (id) => {
     }
 }
 
-export const create_product = async (id) => {
-    const option = {
-        'time_created' : null,
-        'time_modified' : null,
-        'price' : 0,
-        'infos' : {},
-        'name' : null,
-        'ratings' : []
+export const createProduct = async (option) => {
+    const basic = [
+        'time_created','time_modified','price','name','ratings'
+    ]
+    const infos = {}
+    for (let key in option){
+        if (!basic.includes(key)) {
+            console.log(key);
+            infos[key] = option[key];
+        }
     }
-// Ví dụ cho option
-// {
-// "time_created": "2022-01-01 10:20:20",
-// "time_modified": "2022-01-01 10:20:20",
-// "price": 0,
-// "infos": { // emptyalble
-//     "additionalProp1": "string",
-//     "additionalProp2": "string",
-//     "additionalProp3": "string"
-// },
-// "name": "string",
-// "ratings": []
-// }
-    const result = await post('product',option)
+    const data = {}
+    for (let it in basic) {
+        if (basic[it] in option) {
+            data[basic[it]] = option[basic[it]];
+        }
+    }
+    data['infos'] = {};
+    for (let info in infos) {
+        data['infos'][info] = infos[info];
+    }
+    if (data['ratings'] == null) {
+        data['ratings'] = [];
+    }
+    const result = await post('product',data)
     if (result != null) {
        const id = await result.text()
        return id
