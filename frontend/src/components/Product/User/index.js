@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProductList } from "../../../Services/productService";
+import { getProductList } from "../../../Services/backend/product";
 import ProductItem from "./ProductItem";
 import "./DisplayProduct.scss";
 import { Col, Row } from "antd";
