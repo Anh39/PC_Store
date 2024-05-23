@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProductDetail } from "../../../Services/productService";
+import { getProductDetail } from "../../../Services/backend/product";
 import { Button, Flex, Tabs } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../actions/cart";
@@ -24,10 +24,11 @@ function ProductDetail() {
     useEffect(() => {
         const fetchAPI = async () => {
             const response = await getProductDetail(params.id);
-            const data = {
-                ...response,
-            };
-            setProduct(data);
+            console.log(response);
+            // const data = {
+            //     ...response,
+            // };
+            setProduct(response);
         };
         fetchAPI();
         // eslint-disable-next-line react-hooks/exhaustive-deps
