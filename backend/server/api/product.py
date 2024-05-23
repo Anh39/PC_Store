@@ -8,6 +8,21 @@ headers = {
     "Content-Type": "application/json"
 }
 class ProductDBAPI(BaseDBAPI):
+    async def get_category(
+        self
+    ) -> list[dict[str,object]]:
+        try:
+            params = {
+                'key' : 'category'
+            }
+            async with(self.session.get(url='/map',params=params,headers=headers)) as response:
+                if (response.status == 200):
+                    result = await response.json()
+                    return result
+                else:
+                    print('ERR')
+        except Exception as e:
+            print(e)
     async def get_product(
         self,
         data : dict[str,object|None]

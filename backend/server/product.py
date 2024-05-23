@@ -9,10 +9,19 @@ class ProductManager:
         self.product_api : ProductDBAPI = ProductDBAPI()
         self.product_api.start()
         self.validator = validator
+    async def get_category(self,admin_token : str = get_token(None)) -> list[str]:
+        valid = await self.validator.admin_validate(admin_token)
+        if (valid):
+            list_data = await self.product_api.get_category()
+            result = set()
+            for row in list_data:
+                result.add(row['value'])
+            return list(result)
+        else:
+            return []
     async def create_product(self,data : Product,admin_token : str = get_token(None)) -> None | int:
-        print(data.model_dump())
-        validate_result = await self.validator.admin_validate(admin_token)
-        if (validate_result):
+        valid = await self.validator.admin_validate(admin_token)
+        if (valid):
             dict_data = data.model_dump()
             dict_data.pop('id')
             result = await self.product_api.create_product(dict_data)

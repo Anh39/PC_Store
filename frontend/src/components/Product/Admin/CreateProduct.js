@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd";
-import { getCategoryList } from "../../../Services/categoryService";
+import { getCategoryList } from "../../../Services/backend/product";
 import { createProduct } from "../../../Services/backend/product";
 
 const { Option } = Select;
@@ -39,9 +39,9 @@ function CreateProduct(props) {
 
     useEffect(() => {
         const fetchApi = async () => {
-            // const result = await getCategoryList();
-            // console.log(result);
-            // setDataCategory(result);
+            const result = await getCategoryList();
+            console.log(result);
+            setDataCategory(result);
         }
 
         fetchApi();
@@ -112,7 +112,7 @@ function CreateProduct(props) {
                     <Form.Item name="category" label="Danh mục">
                         <Select>
                             {dataCategory.map((item, index) => (
-                                <Option key={index}>{item}</Option>
+                                <Option key={index} value={item}>{item}</Option>
                             ))}
                         </Select>
                     </Form.Item>

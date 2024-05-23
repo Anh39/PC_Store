@@ -58,3 +58,4 @@ class MapCRUD(BaseCRUD):
             for result in results:
                 response_results.append(result[0].model_dump())
             return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)
+    

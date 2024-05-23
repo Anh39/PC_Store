@@ -50,6 +50,7 @@ class FastAPIServer:
         self.app.add_api_route('/image',self.media.upload_image,methods=['POST'],tags=['Media'])
         self.app.add_api_route('/image',self.media.delete_image,methods=['DELETE'],tags=['Media'])
         
+        self.app.add_api_route('/product/category',self.product.get_category,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/product',self.product.get_product,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/products',self.product.search_products,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/product',self.product.change_product,methods=['PATCH'],tags=['Product'])
