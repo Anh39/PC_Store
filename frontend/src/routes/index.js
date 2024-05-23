@@ -1,10 +1,15 @@
-import LayoutDefault from "../LayoutDefault";
+import LayoutDefault from "../Layout/LayoutDefault";
 import Logout from "../pages/Logout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Cart from "../components/Cart";
 import ProductDetail from "../components/Product/User/ProductDetail";
+import Checkout from "../pages/Checkout";
+import Search from "../components/Search";
+import PrivateRoute from "../components/PrivateRoute";
+import LayoutAdmin from "../Layout/LayoutAdmin";
+import Dashboard from "../pages/Dashboard";
 
 export const routes = [
     // Public
@@ -29,6 +34,10 @@ export const routes = [
                 element: <Logout />
             },
             {
+                path: "/search",
+                element: <Search />
+            },
+            {
                 path: "/cart",
                 element: <Cart />
             },
@@ -37,8 +46,26 @@ export const routes = [
                 element: <ProductDetail />
             },
             {
+                path: "/checkout",
+                element: <Checkout />
+            },
+            {
                 path: "*",
                 element: <h1>404</h1>
+            }
+        ]
+    },
+    {
+        element: <PrivateRoute />,
+        children: [
+            {
+                element: <LayoutAdmin />,
+                children: [
+                    {
+                        path: "/admin",
+                        element: <Dashboard />
+                    },
+                ]
             }
         ]
     }
