@@ -3,17 +3,19 @@ from sqlalchemy import ForeignKey,Column,Integer
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column,relationship
 from datetime import datetime,date
+from .product_category import product_category_association
 
 class ProductSchema(BaseSchema):
     __tablename__ = 'product'
     id : Mapped[int] = mapped_column(primary_key=True,autoincrement=True)
     name : Mapped[str]
-    time_created : Mapped[datetime]
+    time_created : Mapped[datetime] 
     time_modified : Mapped[datetime]
     price : Mapped[float]
     
     infos = relationship('MapSchema',back_populates='product')
     have_ratings = relationship('RatingSchema',back_populates='rated_product')
+    in_categories = relationship('CategorySchema',back_populates=None,secondary=product_category_association)
     _blacklist = ['infos','have_ratings']
     def model_dump(self) -> dict[str, object]:
         result = super().model_dump()
@@ -28,3 +30,4 @@ class ProductSchema(BaseSchema):
         return result
     
 from .map import MapSchema
+from .category import CategorySchema

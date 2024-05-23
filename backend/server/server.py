@@ -6,6 +6,7 @@ from .product import ProductManager
 from .user import UserManager
 from .voucher import VoucherManager
 from .validator import UserValidator
+from .media import MediaManager
 from fastapi.middleware.cors import CORSMiddleware
 
 class FastAPIServer:
@@ -21,6 +22,7 @@ class FastAPIServer:
         self.post = PostManager()
         self.product = ProductManager(self.validator)
         self.user = UserManager(self.validator)
+        self.media = MediaManager(self.validator)
         self.voucher = VoucherManager()
         
         self.app.add_middleware(
@@ -44,6 +46,9 @@ class FastAPIServer:
         self.app.add_api_route('/my_cart',self.user.get_cart,methods=['GET'],tags=['User'])
         self.app.add_api_route('/my_vouchers',self.user.get_vouchers,methods=['GET'],tags=['User'])
         self.app.add_api_route('/my_orders',self.user.get_orders,methods=['GET'],tags=['User'])
+        
+        self.app.add_api_route('/image',self.media.upload_image,methods=['POST'],tags=['Media'])
+        self.app.add_api_route('/image',self.media.delete_image,methods=['DELETE'],tags=['Media'])
         
         self.app.add_api_route('/product',self.product.get_product,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/products',self.product.search_products,methods=['GET'],tags=['Product'])

@@ -14,23 +14,29 @@ function Register() {
     ];
 
     const onFinish = async (e) => {
-        const checkExistsEmail = await checkExists("email", e.email);
-        if (checkExistsEmail.length > 0) {
-            alert("Email đã tồn tại");
+        // const checkExistsEmail = await checkExists("email", e.email);
+        // if (checkExistsEmail.length > 0) {
+        //     alert("Email đã tồn tại");
+        // } else {
+        //     const options = {
+        //         username: e.username,
+        //         email: e.email,
+        //         password: e.password,
+        //         token: generateToken()
+        //     };
+        //     const response = await register(options);
+        //     console.log(response);
+        //     if (response) {
+        //         navigate("/login");
+        //     } else {
+        //         alert("Sai tài khoản hoặc mật khẩu");
+        //     }
+        // }
+        const response = await register(e.email, e.password,e.username);
+        if (response.success) {
+            navigate("/login");
         } else {
-            const options = {
-                username: e.username,
-                email: e.email,
-                password: e.password,
-                token: generateToken()
-            };
-            const response = await register(options);
-            console.log(response);
-            if (response) {
-                navigate("/login");
-            } else {
-                alert("Sai tài khoản hoặc mật khẩu");
-            }
+            alert("Sai tài khoản hoặc mật khẩu");
         }
     }
 

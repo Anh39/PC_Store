@@ -71,10 +71,10 @@ class Cart(BaseModel):
 
 class Product(BaseModel):
     id : int | None = None
-    time_created : str
-    time_modified : str
-    price : float
-    infos : dict[str,str]
+    time_created : str = "2024-1-1 0:0:0"
+    time_modified : str = "2024-1-1 0:0:0"
+    price : float 
+    infos : dict[str,object]
     name : str
     ratings : list['Rating'] = []
     @classmethod

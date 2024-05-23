@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd";
 import { getCategoryList } from "../../../Services/categoryService";
-import { createProduct } from "../../../Services/productService";
+import { createProduct } from "../../../Services/backend/product";
 
 const { Option } = Select;
 
@@ -13,8 +13,9 @@ function CreateProduct(props) {
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleSubmit = async (data) => {
-        const result = await createProduct(data);
-        if (result) {
+        const product_id = await createProduct(data);
+        if (product_id != null) {
+            console.log(product_id);
             form.resetFields();
             messageApi.open({
                 type: 'success',
@@ -38,9 +39,9 @@ function CreateProduct(props) {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await getCategoryList();
-            console.log(result);
-            setDataCategory(result);
+            // const result = await getCategoryList();
+            // console.log(result);
+            // setDataCategory(result);
         }
 
         fetchApi();

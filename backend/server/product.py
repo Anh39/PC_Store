@@ -10,6 +10,7 @@ class ProductManager:
         self.product_api.start()
         self.validator = validator
     async def create_product(self,data : Product,admin_token : str = get_token(None)) -> None | int:
+        print(data.model_dump())
         validate_result = await self.validator.admin_validate(admin_token)
         if (validate_result):
             dict_data = data.model_dump()
@@ -18,9 +19,14 @@ class ProductManager:
             if (result):
                 return result
         return None
-    async def search_products(self,data : dict) -> list[Product]:
-        return [Product.get_test()]
-    async def get_product(self,id : int,token : str | None = get_token()):
+    async def search_products(self,data : dict,token : str | None = get_token()) -> list[Product]:
+        validate_result = await self.validator.guest_validate(token)
+        if (validate_result):
+            result = await self.product_api.search_product(data)
+            if (result):
+                return result
+        return False
+    async def get_product(self,id : int | None = None,token : str | None = get_token()) -> list:
         validate_result = await self.validator.guest_validate(token)
         if (validate_result):
             dict_data = {
