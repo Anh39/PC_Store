@@ -113,7 +113,8 @@ class ProductCRUD(BaseCRUD):
             id : int | None = None,
             mode : str = Literal['random'],
             offset : int = 0,
-            limit : int = 50
+            limit : int = 50,
+            name : str | None = None
         ) -> Response:
         with Session(self.engine) as session:
             query = select(ProductSchema)
@@ -121,6 +122,8 @@ class ProductCRUD(BaseCRUD):
                 query = query.where(ProductSchema.id == id)
             if (mode == 'random'):
                 query = query.order_by(func.random())
+            if (name != None):
+                query = query.where(ProductSchema.name.like(f'%{name}%'))
             query = query.offset(offset).limit(limit)
             results = session.execute(query)
             response_results = []

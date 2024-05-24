@@ -52,19 +52,13 @@ class CartCRUD(BaseCRUD):
                     session.commit()
                 else:
                     return Response(status_code=404)
-            elif (command == '+'):
+            elif (type(command) == int):
                 if (target_item != None):
-                    target_item.amount += 1
-                    session.commit()
-                else:
-                    return Response(status_code=404)
-            elif (command == '-'):
-                if (target_item != None):
-                    if (target_item.amount > 1):
-                        target_item.amount -= 1
+                    if (command > 0):
+                        target_item.amount = command
                         session.commit()
                     else:
-                        return Response(status_code=200,content='Minimum')
+                        return Response(status_code=404)
                 else:
                     return Response(status_code=404)
             else:

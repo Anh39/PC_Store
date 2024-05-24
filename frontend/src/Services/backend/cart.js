@@ -20,22 +20,10 @@ export const addProductToCart = async (id) => {
         return false
     }
 }
-export const increaseAmount = async (id) => { 
+export const changeCartAmount = async (id,amount) => { 
     let option = {
         'id' : id,
-        'command' : '+'
-    }
-    const result = await post(`cart`,option)
-    if (result != null) {
-        return true
-    } else {
-        return false
-    }
-}
-export const decreaseAmount = async (id) => { 
-    let option = {
-        'id' : id,
-        'command' : '-'
+        'amount' : amount
     }
     const result = await post(`cart`,option)
     if (result != null) {
