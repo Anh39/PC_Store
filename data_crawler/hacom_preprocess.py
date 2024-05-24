@@ -12,6 +12,12 @@ def process_flow(file_path : str):
         data['category'] = 'lap'
     elif ('pc' in file_path):
         data['category'] = 'pc'
+    elif ('display' in file_path):
+        data['category'] = 'display'
+    elif ('auxility' in file_path):
+        data['category'] = 'auxility'
+    else:
+        data['category'] = 'other'
     if (data['info'] == None):
         data['info'] = []
     else:

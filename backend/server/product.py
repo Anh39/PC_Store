@@ -2,6 +2,7 @@ from .model import *
 from fastapi import HTTPException,Header
 from .validator import UserValidator
 from .api.product import ProductDBAPI
+from typing import Literal
 
 get_token = Header
 class ProductManager:
@@ -35,12 +36,16 @@ class ProductManager:
             if (result):
                 return result
         return False
-    async def get_product(self,id : int | None = None,token : str | None = get_token()) -> list:
+    async def get_product(self,id : int | None = None,mode : Literal['random','none'] = 'random',offset : int = 0,limit : int = 50,token : str | None = get_token()) -> list:
         validate_result = await self.validator.guest_validate(token)
         if (validate_result):
             dict_data = {
-                "id" : id
+                'id' : id,
+                'mode' : mode,
+                'offset' : offset,
+                'limit' : limit
             }
+            print(dict_data)
             result = await self.product_api.get_product(dict_data)
             if (result):
                 return result

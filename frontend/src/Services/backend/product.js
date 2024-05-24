@@ -31,7 +31,6 @@ export const getProductList = async (id) => {
             } catch {
                 console.log(i)
             }
-            
         }
         return data;
     } else {
@@ -47,15 +46,56 @@ export const getProductDetail = async (id) => {
         let images = []
         let i = 0
         while(true){
-            try{
-                i+=1
-                images = data[`images_${i}`]
-            } catch {
-                break
+            i+=1
+            let image = data[`image_${i}`]
+            if (image == null) {
+                break;
+            } else {
+                images.push(image);
+                delete data[`image_${i}`]
+            }
+        }
+        let basic_infos = []
+        i = 0
+        while(true){
+            i+=1
+            let basic_info = data[`basic_info_${i}`]
+            if (basic_info == null) {
+                break;
+            } else {
+                basic_infos.push(basic_info);
+                delete data[`basic_info_${i}`]
+            }
+        }
+        let detail_infos = []
+        i = 0
+        while(true){
+            i+=1
+            let detail_info = data[`detail_info_${i}`]
+            if (detail_info == null) {
+                break;
+            } else {
+                detail_infos.push(detail_info);
+                delete data[`detail_info_${i}`]
+            }
+        }
+        let notices = []
+        i = 0
+        while(true){
+            i+=1
+            let notice = data[`notice_${i}`]
+            if (notice == null) {
+                break;
+            } else {
+                notices.push(notice);
+                delete data[`notice_${i}`]
             }
         }
         data['images'] = images
-        console.log(data);
+        data['basic_infos'] = basic_infos
+        data['detail_infos'] = detail_infos
+        data['notices'] = notices
+        console.log(data)
         return data;
     } else {
         return null
