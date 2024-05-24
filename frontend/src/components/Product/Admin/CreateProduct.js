@@ -94,15 +94,6 @@ function CreateProduct(props) {
                     </Form.Item>
 
                     <Form.Item
-                        name="discountPercentage"
-                        label="Tỉ lệ giảm giá"
-                        rules={rules}
-                    >
-                        <InputNumber min={0} />
-                    </Form.Item>
-
-
-                    <Form.Item
                         name="stock"
                         label="Số lượng còn lại"
                     >

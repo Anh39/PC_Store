@@ -11,7 +11,7 @@ function MenuSider() {
         },
         {
             key: "menu-2",
-            label: "Danh sách mua hàng",
+            label: <Link to="/historyadmin">Danh sách mua hàng</Link>,
             icon: <icons.CheckOutlined />,
         },
         {

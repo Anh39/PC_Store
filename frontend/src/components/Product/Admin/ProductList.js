@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
-import { getProductList } from "../../../Services/productService";
+import { getProductList } from "../../../Services/backend/product";
 
 function ProductList(props) {
     const { reload } = props;
@@ -27,9 +27,8 @@ function ProductList(props) {
                 {data.map(item => (
                     <div className="product__item" key={item.index}>
                         <img className="product__img" src={item.thumbnail} alt={item.title} />
-                        <h4 className="product__title">{item.title}</h4>
-                        <div className="product__price">{item.price}$</div>
-                        <div className="product__discountPercentage">{item.discountPercentage}%</div>
+                        <h4 className="product__title">{item.name}</h4>
+                        <div className="product__price">{item.price}đ</div>
                         <EditProduct item={item} onReload={handleReload} />
                         <DeleteProduct item={item} onReload={handleReload} />
                     </div>

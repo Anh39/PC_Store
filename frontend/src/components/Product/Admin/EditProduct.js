@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Modal, Select, Spin, notification } from "antd";
 import { editProduct } from "../../../Services/productService";
 import { EditOutlined } from "@ant-design/icons";
-import { getCategoryList } from "../../../Services/categoryService";
+import { getCategoryList } from "../../../Services/backend/product";
 
 const { Option } = Select;
 
@@ -94,7 +94,7 @@ function EditProduct(props) {
                             name="title"
                             label="Tiêu đề"
                         >
-                            <Input defaultValue={data.title} />
+                            <Input defaultValue={data.name} />
                         </Form.Item>
 
                         <Form.Item
@@ -103,22 +103,6 @@ function EditProduct(props) {
                             rules={rules}
                         >
                             <InputNumber min={1} defaultValue={data.price} />
-                        </Form.Item>
-
-                        <Form.Item
-                            name="discountPercentage"
-                            label="Giảm giá"
-                            rules={rules}
-                        >
-                            <InputNumber min={1} defaultValue={data.discountPercentage} />
-                        </Form.Item>
-
-                        <Form.Item
-                            name="stock"
-                            label="Số lượng còn lại"
-                            rules={rules}
-                        >
-                            <InputNumber min={1} defaultValue={data.stock} />
                         </Form.Item>
 
                         <Form.Item
@@ -137,8 +121,8 @@ function EditProduct(props) {
                         </Form.Item>
 
                         <Form.Item
-                            name="description"
-                            label="Mô tả"
+                            name="basic_infos"
+                            label="Thông tin"
                         >
                             <Input.TextArea showCount maxLength={10000} />
                         </Form.Item>

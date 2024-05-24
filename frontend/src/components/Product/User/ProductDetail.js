@@ -23,7 +23,7 @@ function ProductDetail() {
 
     useEffect(() => {
         const fetchAPI = async () => {
-            const response = await getProductDetail(params.id); 
+            const response = await getProductDetail(params.id);
             setProduct(response);
         };
         fetchAPI();
@@ -43,7 +43,7 @@ function ProductDetail() {
                                 items={product.images.map((image, index) => {
                                     const id = String(index + 1);
                                     return {
-                                        label: `Hình ${id} `,
+                                        label: `H${id} `,
                                         key: id,
                                         children: <div className="image" >
                                             <img src={image} alt="nothing" />
@@ -53,15 +53,33 @@ function ProductDetail() {
                             />
                         </div>
                         <div style={{ margin: 20 }}>
-                            <p><strong>Mô tả:</strong> {product.description}</p>
-                            <p><strong>Hãng:</strong> {product.brand}</p>
-                            <p><strong>Loại:</strong> {product.category}</p>
-                            <p><strong>Còn lại:</strong> {product.stock}</p>
+                            <ul>
+                                <h4>Thông tin cơ bản</h4>
+                                {product.basic_infos.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
+                            <div className="product__price-new">
+                                {product.price} VND
+                            </div>
+                            <div className="product__price-old">{product.full_price}</div>
 
                             <Button type="primary" >Mua ngay</Button>
                             <Button onClick={handleAddToCart}>Thêm vào giỏ hàng</Button>
                         </div>
+                        <div>
+                            {product.detail_infos.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </div>
                     </Flex>
+
+                    <div style={{ margin: 20 }}>
+                        <h2>Giới thiệu</h2>
+                        <p>
+                            { }
+                        </p>
+                    </div>
                 </>
             )}
         </>

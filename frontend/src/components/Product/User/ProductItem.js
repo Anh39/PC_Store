@@ -32,12 +32,11 @@ function ProductItem(props) {
                     size="small"
                     cover={<img className="product__image" src={item.thumbnail} alt={item.title} onClick={ToDetail} />}
                 >
-                    <h4 className="product__title" onclick={ToDetail}><Link to={`/product/${item.id}`}>{item.title}</Link></h4>
+                    <h4 className="product__title" onclick={ToDetail}><Link to={`/product/${item.id}`}>{item.name}</Link></h4>
                     <div className="product__price-new">
-                        {(item.price * (100 - item.discountPercentage) / 100).toFixed(0)}$
+                        {item.price} VND
                     </div>
-                    <div className="product__price-old">{item.price}$</div>
-                    <div className="product__percent">{item.discountPercentage}%</div>
+                    <div className="product__price-old">{item.full_price} VND</div>
                     <button onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
                 </Card>
             </div>
