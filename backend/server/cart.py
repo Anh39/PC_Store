@@ -22,11 +22,11 @@ class CartManager:
         return Cart.model_validate(result).items
     async def add_product_to_cart(self,body : CartChangeRequest,token : str = get_token()):
         return await self.__change_cart(body.id,token,command='Add')
-    async def increase_decrease_product_in_cart(self,body : CartChangeRequest,token : str = get_token()):
-        return await self.__change_cart(body.id,token,command=body.command)
+    async def change_amount(self,body : CartChangeRequest,token : str = get_token()):
+        return await self.__change_cart(body.id,token,command=body.amount)
     async def delete_product_in_cart(self,id : int,token : str = get_token()):
         return await self.__change_cart(id,token,command='Delete')
-    async def __change_cart(self,id : int,token : str,command : str = Literal['+','-','Add','Delete']): 
+    async def __change_cart(self,id : int,token : str,command : str | int): 
         return await self.cart_api.modify_cart(
             token=token,
             command=command,

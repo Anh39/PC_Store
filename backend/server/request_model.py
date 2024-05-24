@@ -18,4 +18,4 @@ class ChangeUserInfoRequest(BaseModel):
     
 class CartChangeRequest(BaseModel):
     id : int
-    command : str | None = Literal['+','-','Add','Delete']
+    amount : int | None = None

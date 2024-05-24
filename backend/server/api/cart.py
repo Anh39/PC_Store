@@ -25,7 +25,7 @@ class CartDBAPI(BaseDBAPI):
     async def modify_cart(
         self,
         token : str,
-        command : str,
+        command : str | int,
         id : int
     ) -> bool:
         try:
