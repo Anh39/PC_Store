@@ -6,6 +6,17 @@ backend = os.path.join(_project_path,'backend')
 class Config:
     path = join(_project_path,'config')
     config_name = 'config'
+class API:
+    path = join(_project_path,'api.json')
+    _data = None
+    def _read_configure(self):
+        with open(self.path,'r') as file:
+            self._data = json.loads(file.read())
+    def get_paypal_configure(self):
+        if (self._data == None):
+            self._read_configure()
+        return self._data('paypal')
+
 class Common:
     path = join(backend,'common')
     config = join(path,'config.json')

@@ -152,3 +152,4 @@ class Rating(BaseModel):
             product_id=13222
         )
         return result
+    

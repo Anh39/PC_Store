@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Literal
 
 class LoginRequest(BaseModel):
     email : str
@@ -15,5 +16,6 @@ class ChangeUserInfoRequest(BaseModel):
     confirm_password : str
     data : dict[str,object]
     
-class ChangeCartRequest(BaseModel):
-    data : dict[str,object]
+class CartChangeRequest(BaseModel):
+    id : int
+    command : str | None = Literal['+','-','Add','Delete']
