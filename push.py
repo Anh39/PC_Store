@@ -1,0 +1,1 @@
+from data_crawler import database_push

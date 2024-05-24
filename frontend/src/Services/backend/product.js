@@ -25,6 +25,14 @@ export const getProductList = async (id) => {
     const result = await get(`product`)
     if (result != null) {
         const data = await result.json();
+        for(let i=0;i<data.length;i++) {
+            try {
+                data[i]['thumbnail'] = data[i]['image_0']
+            } catch {
+                console.log(i)
+            }
+            
+        }
         return data;
     } else {
         return []
@@ -35,7 +43,19 @@ export const getProductDetail = async (id) => {
     if (result != null) {
         let data = await result.json();
         data = data[0];
-        data['images'] = [data['thumbnail']]
+        data['thumbnail'] = data['image_0']
+        let images = []
+        let i = 0
+        while(true){
+            try{
+                i+=1
+                images = data[`images_${i}`]
+            } catch {
+                break
+            }
+        }
+        data['images'] = images
+        console.log(data);
         return data;
     } else {
         return null
