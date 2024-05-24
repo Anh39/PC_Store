@@ -1,21 +1,25 @@
 import { useDispatch } from "react-redux";
 import { deleteItem, updateQuantity } from "../../actions/cart";
-import { useRef } from "react";
+// import { useRef, useState } from "react";
+import { Button, InputNumber } from "antd";
 function CartItem(props) {
     const { item } = props;
-    const inputRef = useRef();
     const dispatch = useDispatch();
 
-    const handleDown = () => {
-        if (item.quantity > 1) {
-            dispatch(updateQuantity(item.id, -1));
-            inputRef.current.value = parseInt(inputRef.current.value) - 1;
-        }
-    }
+    // const handleDown = () => {
+    //     if (item.quantity > 1) {
+    //         dispatch(updateQuantity(item.id, -1));
+    //         inputRef.current.value = parseInt(inputRef.current.value) - 1;
+    //     }
+    // }
 
-    const handleUp = () => {
-        dispatch(updateQuantity(item.id));
-        inputRef.current.value = parseInt(inputRef.current.value) + 1;
+    // const handleUp = () => {
+    //     dispatch(updateQuantity(item.id));
+    //     inputRef.current.value = parseInt(inputRef.current.value) + 1;
+    // }
+
+    const ChangeQuantity = (value) => {
+        dispatch(updateQuantity(item.id, value));
     }
 
     const handleDelete = () => {
@@ -33,11 +37,9 @@ function CartItem(props) {
                     <div className="cart__price-new">{item.info.price}đ</div>
                 </div>
                 <div className="cart__quantity">
-                    <button onClick={handleDown}>-</button>
-                    <input ref={inputRef} defaultValue={item.quantity} />
-                    <button onClick={handleUp}>+</button>
+                    <InputNumber min={1} defaultValue={1} onChange={ChangeQuantity} />
                 </div>
-                <button onClick={handleDelete}>Xóa</button>
+                <Button onClick={handleDelete}>Xóa</Button>
             </div>
         </>
     )

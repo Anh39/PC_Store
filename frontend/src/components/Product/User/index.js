@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getProductList } from "../../../Services/backend/product";
 import ProductItem from "./ProductItem";
 import "./DisplayProduct.scss";
-import { Col, Row } from "antd";
 
 function Product() {
 
@@ -14,18 +13,14 @@ function Product() {
             setProduct(data);
         }
         fetchAPI();
-    }, []); 
+    }, []);
 
     return (
         <>
             <div className="product">
-                <Row gutter={[10, 20]}>
-                    {product.map(item => (
-                        <Col span={6}>
-                            <ProductItem item={item} key={item.id} />
-                        </Col>
-                    ))}
-                </Row>
+                {product.map(item => (
+                    <ProductItem item={item} key={item.id} />
+                ))}
             </div>
         </>
     )

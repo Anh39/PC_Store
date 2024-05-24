@@ -10,11 +10,15 @@
     margin-right: 3px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
 }
 
 .product__img {
     width: 100%;
-    aspect-ratio: 4/3;
+    aspect-ratio: 1/1;
 }
 
 .product__img img {
@@ -28,4 +32,15 @@
     font-weight: 600;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.product__price {
+    color: green;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.product__button {
+    display: flex;
+    justify-content: space-between;
 }

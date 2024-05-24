@@ -17,7 +17,7 @@ function ProductDetail() {
         if (cart.some(itemCart => itemCart.id === params.id)) {
             // dispatch(updateQuantity(item.id));
         } else {
-            dispatch(addToCart(params.id, params));
+            dispatch(addToCart(params.id, product));
         }
     }
 

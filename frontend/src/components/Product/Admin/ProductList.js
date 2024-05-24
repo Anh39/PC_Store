@@ -26,11 +26,17 @@ function ProductList(props) {
             <div className="product__list">
                 {data.map(item => (
                     <div className="product__item" key={item.index}>
-                        <img className="product__img" src={item.thumbnail} alt={item.title} />
-                        <h4 className="product__title">{item.name}</h4>
-                        <div className="product__price">{item.price}đ</div>
-                        <EditProduct item={item} onReload={handleReload} />
-                        <DeleteProduct item={item} onReload={handleReload} />
+                        <div>
+                            <img className="product__img" src={item.thumbnail} alt={item.title} />
+                            <h4 className="product__title">{item.name}</h4>
+                        </div>
+                        <div>
+                            <div className="product__price">{item.price}đ</div>
+                            <div className="product__button">
+                                <EditProduct item={item} onReload={handleReload} />
+                                <DeleteProduct item={item} onReload={handleReload} />
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>

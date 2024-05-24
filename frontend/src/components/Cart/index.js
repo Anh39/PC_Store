@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import CartList from "./CartList";
 import { deleteAll } from "../../actions/cart";
+import { Button } from "antd";
 
 function Cart() {
     const dispatch = useDispatch();
@@ -18,7 +19,7 @@ function Cart() {
     return (
         <>
             <h2>Giỏ hàng</h2>
-            <button onClick={handleDeleteAll}>Xóa tất cả</button>
+            <Button onClick={handleDeleteAll}>Xóa tất cả</Button>
 
             <div>
                 {cart.length > 0 ? (
