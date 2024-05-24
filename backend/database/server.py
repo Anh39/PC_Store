@@ -5,6 +5,7 @@ from sqlalchemy import Engine,create_engine
 from backend.database.schema.user import BaseSchema
 import uvicorn
 from .crud import *
+import logging
 
 class DatabaseServer:
     def __init__(self) -> None:
@@ -13,7 +14,7 @@ class DatabaseServer:
         self.port : int = config['port']
         self.app : FastAPI = FastAPI()
         self.engine : Engine = create_engine("sqlite:///"+'database.db',echo=True)
-    
+        logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
         BaseSchema.metadata.create_all(self.engine)
         
         self.cruds : dict[str,BaseCRUD] = {

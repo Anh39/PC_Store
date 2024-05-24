@@ -22,12 +22,26 @@ class Storage:
 
 class Data:
     path = join(_project_path,'data_crawler','data')
+    class HacomRaw:
+        path = join(_project_path,'data_crawler','data','hacom_raw')
+        pc_game = join(path,'pc_game')
+        pc_graphic = join(path,'pc_graphic')
+        pc_office = join(path,'pc_office')
+        lap_game = join(path,'lap_game')
+        lap_common = join(path,'lap_common')
+        component = join(path,'component')
+        auxility = join(path,'auxility')
+        display = join(path,'display')
     class Hacom:
         path = join(_project_path,'data_crawler','data','hacom')
         pc_game = join(path,'pc_game')
         pc_graphic = join(path,'pc_graphic')
         pc_office = join(path,'pc_office')
-    
+        lap_game = join(path,'lap_game')
+        lap_common = join(path,'lap_common')
+        component = join(path,'component')
+        auxility = join(path,'auxility')
+        display = join(path,'display')
 class util:
     @classmethod
     def get_tree(self,folder_path : str):
