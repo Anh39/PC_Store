@@ -22,43 +22,28 @@ export const get_product = async (id) => {
     }
 }
 export const getProductList = async (id) => {
-    const result = await get(`product?limit=100`)
+    const result = await get(`product?limit=3000`)
     if (result != null) {
         const data = await result.json();
-        for(let i=0;i<data.length;i++) {
-            try {
-                data[i]['thumbnail'] = data[i]['image_0']
-            } catch {
-                console.log(i)
-            }
-        }
+        // for(let i=0;i<data.length;i++) {
+        //     try {
+        //         data[i]['thumbnail'] = data[i]['image_0']
+        //     } catch {
+        //         console.log(i)
+        //     }
+        // }
         return data;
     } else {
         return []
     }
 }
 export const getProductDetail = async (id) => { 
-    const result = await get(`product/?id=${id}`)
+    const result = await get(`product_detail/?id=${id}`)
     if (result != null) {
         let data = await result.json();
         data = data[0];
-        let images = []
-        let i = 0
-        while(true){
-            let image = data[`image_${i}`]
-            if (image == null) {
-                break;
-            } else {
-                images.push(image);
-                delete data[`image_${i}`]
-            }
-            i++
-            if (i === 6) {
-                break;
-            }
-        }
         let basic_infos = []
-        i = 0
+        let i = 0
         while(true){
             let basic_info = data[`basic_info_${i}`]
             if (basic_info == null) {
@@ -93,7 +78,6 @@ export const getProductDetail = async (id) => {
             }
             i++
         }
-        data['images'] = images
         data['basic_infos'] = basic_infos
         data['detail_infos'] = detail_infos
         data['notices'] = notices
@@ -104,29 +88,33 @@ export const getProductDetail = async (id) => {
     }
 }
 export const createProduct = async (option) => {
-    const basic = [
-        'time_created','time_modified','price','name','ratings'
+    // const basic = [
+    //     'time_created','time_modified','price','name','ratings'
+    // ]
+    // const infos = {}
+    // for (let key in option){
+    //     if (!basic.includes(key)) {
+    //         console.log(key);
+    //         infos[key] = option[key];
+    //     }
+    // }
+    // const data = {}
+    // for (let it in basic) {
+    //     if (basic[it] in option) {
+    //         data[basic[it]] = option[basic[it]];
+    //     }
+    // }
+    // data['infos'] = {};
+    // for (let info in infos) {
+    //     data['infos'][info] = infos[info];
+    // }
+    let data = option
+    data['images'] = [
+        {
+            'path' : option.thumbnail,
+            'order' : 0
+        }
     ]
-    const infos = {}
-    for (let key in option){
-        if (!basic.includes(key)) {
-            console.log(key);
-            infos[key] = option[key];
-        }
-    }
-    const data = {}
-    for (let it in basic) {
-        if (basic[it] in option) {
-            data[basic[it]] = option[basic[it]];
-        }
-    }
-    data['infos'] = {};
-    for (let info in infos) {
-        data['infos'][info] = infos[info];
-    }
-    if (data['ratings'] == null) {
-        data['ratings'] = [];
-    }
     const result = await post('product',data)
     if (result != null) {
        const id = await result.text()

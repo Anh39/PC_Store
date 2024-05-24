@@ -26,11 +26,13 @@ class PushAPI:
             return False
     def format(self,data : dict):
         basic = [
-            'time_created','time_modified','price','name','ratings'
+            'price','name','images'
         ]
         result = {}
-        data_infos = data['info']
+        data_infos = data['info']        
         i=0
+        if (data_infos == []):
+            return None
         for info in data_infos:
             result['basic_info_{}'.format(i)] = info
             i+=1
@@ -42,30 +44,22 @@ class PushAPI:
         images = data['images']
         i=0
         for image in images:
-            result['image_{}'.format(i)] = image
+            images[i] = {
+                'path' : image,
+                'order' : i
+            }
             i+=1
-        extra = [
-            'images','info','detail_info','notices'
-        ]
         i=0
         notices = data['notices']
         for notice in notices:
             result['notice_{}'.format(i)] = notice
             i+=1
-        for key in data:
-            if key not in basic and key not in extra:
-                result[key] = data[key]
-        infos = {}
-        final_result = {}
+        if (len(images) == 0):
+            return None
         for key in basic:
-            if (key in data):
-                final_result[key] = data[key]
-        for key in result:
-            if (key not in basic):
-                infos[key] = result[key]
-        final_result['infos'] = infos
-        # print(final_result)
-        return final_result
+            result[key] = data[key]
+        result['thumbnail'] = images[0]['path']
+        return result
 
 async def process():
     handler = PushAPI()
@@ -75,6 +69,8 @@ async def process():
             with open(file_paths[key],'r') as file:
                 data = json.loads(file.read())
                 formated_data = handler.format(data)
+                if (formated_data == None):
+                    continue
                 await handler.push_product(formated_data)
             #     raise Exception
             # break

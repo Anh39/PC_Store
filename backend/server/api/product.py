@@ -23,7 +23,7 @@ class ProductDBAPI(BaseDBAPI):
                     print('ERR')
         except Exception as e:
             print(e)
-    async def get_product(
+    async def get_product_detail(
         self,
         data : dict[str,object|None]
     ) -> dict[str,object]:
@@ -35,6 +35,25 @@ class ProductDBAPI(BaseDBAPI):
             for key in del_keys:
                 data.pop(key)
             async with(self.session.get(url='/product/full',params = data,headers=headers)) as response:
+                if (response.status == 200):
+                    result = await response.json()
+                    return result
+                else:
+                    print('ERR')
+        except Exception as e:
+            print(e)
+    async def get_product(
+        self,
+        data : dict[str,object|None]
+    ) -> dict[str,object]:
+        try:
+            del_keys = []
+            for key in data:
+                if (data[key] == None):
+                    del_keys.append(key)
+            for key in del_keys:
+                data.pop(key)
+            async with(self.session.get(url='/product',params = data,headers=headers)) as response:
                 if (response.status == 200):
                     result = await response.json()
                     return result
