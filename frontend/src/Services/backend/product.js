@@ -22,7 +22,7 @@ export const get_product = async (id) => {
     }
 }
 export const getProductList = async (id) => {
-    const result = await get(`product?limit=3000`)
+    const result = await get(`product?limit=100`)
     if (result != null) {
         const data = await result.json();
         // for(let i=0;i<data.length;i++) {
