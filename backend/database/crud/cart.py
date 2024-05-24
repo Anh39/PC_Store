@@ -28,6 +28,14 @@ class CartCRUD(BaseCRUD):
             user : UserSchema = session.query(UserSchema).filter(UserSchema.token == token).first()
             user_id = user.id
             cart : CartSchema = session.query(CartSchema).filter(CartSchema.user_id == user_id).first()
+            if (product_id == -1):
+                query = delete(CartItemSchema).where(CartItemSchema.cart_id == cart.user_id)
+                session.execute(query)
+                try:
+                    session.commit()
+                    return Response(status_code=200)
+                except:
+                    return Response(status_code=404)
             cart_items_query = cart.items
             cart_items : list[CartItemSchema] = []
             for cart_item in cart_items_query:

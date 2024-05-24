@@ -25,7 +25,7 @@ class FastAPIServer:
         self.media = MediaManager(self.validator)
         self.cart = CartManager(self.validator)
         self.order = OrderManager(self.validator)
-        self.transaction = TransactionManager(self.validator)
+        self.transaction = TransactionManager(self.validator,self.cart)
         
         self.app.add_middleware(
             CORSMiddleware,

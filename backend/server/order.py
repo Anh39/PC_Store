@@ -4,6 +4,7 @@ from backend.server.api.user import UserDBAPI
 from ..common import common
 from fastapi import HTTPException,Header
 from .validator import UserValidator
+from .cart import CartManager
 
 get_token = Header
 
