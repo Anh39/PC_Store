@@ -23,7 +23,7 @@ class OrderManager:
                 'value' : 0
             }
         return Cart.model_validate(result)
-    async def change_cart(self,request : ChangeCartRequest,token : str = get_token(None)) -> Cart: 
+    async def change_cart(self,request : CartChangeRequest,token : str = get_token(None)) -> Cart: 
         return Cart.get_test()
     async def get_orders(self,token : str = get_token()) -> list[Order]: # completed
         results = await self.user_api.get_user_voucher(

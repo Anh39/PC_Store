@@ -1,26 +1,5 @@
 import { get,post} from "./base";
 
-// Chưa có tạo
-
-export const get_product = async (id) => {
-    const result = await get(`/product?id=${id}`)
-    if (result != null) {
-        const data = await result.json();
-        return data;
-    } else {
-        return [
-            {
-              "id": 10,
-              "name": "string",
-              "time_created": "2024-01-01 12:20:30",
-              "time_modified": "2024-02-02 12:25:31",
-              "price": 0,
-              "ratings": [],
-              "detail": "nothing here" // vô hạn trường dữ liệu
-            }
-          ]
-    }
-}
 export const getProductList = async (id) => {
     const result = await get(`product?limit=100`)
     if (result != null) {
