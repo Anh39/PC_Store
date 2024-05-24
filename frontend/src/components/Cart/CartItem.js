@@ -25,13 +25,12 @@ function CartItem(props) {
     return (
         <>
             <div className="cart__item" key={item.info.id}>
-                <img className="cart__image" src={item.info.thumbnail} alt={item.info.title} />
+                <div className="cart__image">
+                    <img src={item.info.thumbnail} alt={item.info.title} />
+                </div>
                 <div className="cart__content">
-                    <h4 className="cart__tilte">{item.info.title}</h4>
-                    <div className="cart__price-new">
-                        {(item.info.price * (100 - item.info.discountPercentage) / 100).toFixed(0)}$
-                    </div>
-                    <div className="cart__price-old">{item.info.price}$</div>
+                    <h4 className="cart__tilte">{item.info.name}</h4>
+                    <div className="cart__price-new">{item.info.price}đ</div>
                 </div>
                 <div className="cart__quantity">
                     <button onClick={handleDown}>-</button>

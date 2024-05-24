@@ -10,6 +10,8 @@ import Search from "../components/Search";
 import PrivateRoute from "../components/PrivateRoute";
 import LayoutAdmin from "../Layout/LayoutAdmin";
 import Dashboard from "../pages/Dashboard";
+import History from "../pages/History";
+import HistoryAdmin from "../pages/HistoryAdmin";
 
 export const routes = [
     // Public
@@ -52,6 +54,10 @@ export const routes = [
             {
                 path: "*",
                 element: <h1>404</h1>
+            },
+            {
+                path: "/history",
+                element: <History />
             }
         ]
     },
@@ -65,6 +71,10 @@ export const routes = [
                         path: "/admin",
                         element: <Dashboard />
                     },
+                    {
+                        path: "/historyadmin",
+                        element: <HistoryAdmin />
+                    }
                 ]
             }
         ]

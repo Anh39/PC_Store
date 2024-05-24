@@ -7,7 +7,7 @@ function Cart() {
     const cart = useSelector(state => state.cartReducer);
 
     const total = cart.reduce((sum, item) => {
-        const priceNew = (item.info.price * (100 - item.info.discountPercentage) / 100);
+        const priceNew = item.info.price;
         return sum + priceNew * item.quantity;
     }, 0);
 
@@ -25,7 +25,7 @@ function Cart() {
                     <>
                         <CartList />
                         <div className="cart__total">
-                            Tổng tiền: <span>{total.toFixed(0)}$</span>
+                            Tổng tiền: <span>{total.toFixed(0)}đ</span>
                         </div>
                     </>
                 ) : (

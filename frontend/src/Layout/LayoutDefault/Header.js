@@ -3,6 +3,10 @@ import { UnorderedListOutlined, LaptopOutlined, RightOutlined } from "@ant-desig
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CartMini from "../../components/CartMini";
+import { useEffect } from "react";
+import { getCategoryList } from "../../Services/backend/product";
+import Personal from "../../components/Personal";
+import logoElink from "../../images/logo-elink.png";
 
 // Laptop gaming, đồ họa
 
@@ -39,6 +43,15 @@ function Header(props) {
         navigate(`/search?keyword=${values.keyword || ''}`);
     }
 
+    useEffect(() => {
+        const fetchAPI = async () => {
+            const data = await getCategoryList();
+            console.log(data);
+        }
+
+        fetchAPI();
+    }, []);
+
     return (
         <>
             <div className="header">
@@ -50,7 +63,7 @@ function Header(props) {
                     </Dropdown>
 
                     <div className="header__logo">
-                        <Link to="/">Logo</Link>
+                        <Link to="/"><img src={logoElink} alt="logo"/></Link>
                     </div>
                 </div>
 
@@ -74,9 +87,7 @@ function Header(props) {
                         <CartMini />
                     </div>
                     {token ? (<>
-                        <Button className="header__button--logout">
-                            <Link to="/logout">Đăng xuất</Link>
-                        </Button>
+                        <Personal />
                     </>) : (<>
 
                         <Button className="header__button--login" type="primary">
