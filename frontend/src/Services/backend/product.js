@@ -42,11 +42,9 @@ export const getProductDetail = async (id) => {
     if (result != null) {
         let data = await result.json();
         data = data[0];
-        data['thumbnail'] = data['image_0']
         let images = []
         let i = 0
         while(true){
-            i+=1
             let image = data[`image_${i}`]
             if (image == null) {
                 break;
@@ -54,11 +52,11 @@ export const getProductDetail = async (id) => {
                 images.push(image);
                 delete data[`image_${i}`]
             }
+            i++
         }
         let basic_infos = []
         i = 0
         while(true){
-            i+=1
             let basic_info = data[`basic_info_${i}`]
             if (basic_info == null) {
                 break;
@@ -66,11 +64,11 @@ export const getProductDetail = async (id) => {
                 basic_infos.push(basic_info);
                 delete data[`basic_info_${i}`]
             }
+            i++
         }
         let detail_infos = []
         i = 0
         while(true){
-            i+=1
             let detail_info = data[`detail_info_${i}`]
             if (detail_info == null) {
                 break;
@@ -78,11 +76,11 @@ export const getProductDetail = async (id) => {
                 detail_infos.push(detail_info);
                 delete data[`detail_info_${i}`]
             }
+            i++
         }
         let notices = []
         i = 0
         while(true){
-            i+=1
             let notice = data[`notice_${i}`]
             if (notice == null) {
                 break;
@@ -90,6 +88,7 @@ export const getProductDetail = async (id) => {
                 notices.push(notice);
                 delete data[`notice_${i}`]
             }
+            i++
         }
         data['images'] = images
         data['basic_infos'] = basic_infos
