@@ -33,13 +33,6 @@ class ProductManager:
             if (result):
                 return result
         return None
-    async def search_products(self,data : dict,token : str | None = get_token()) -> list[Product]:
-        validate_result = await self.validator.guest_validate(token)
-        if (validate_result):
-            result = await self.product_api.search_product(data)
-            if (result):
-                return result
-        return False
     async def get_product(self,id : int | None = None,mode : Literal['random','none'] = 'random',offset : int = 0,limit : int = 50,token : str | None = get_token()) -> list:
         validate_result = await self.validator.guest_validate(token)
         if (validate_result):
@@ -68,8 +61,8 @@ class ProductManager:
             if (result):
                 return result
         return False
-    async def recommend_products(self,data : dict) -> list[Product]:
-        return [Product.get_test()]
+    async def recommend_products(self,id : int | None = None,limit : int = 10,token : str = get_token(None)) -> list:
+        return await self.get_product(token=token,limit=limit)
     async def change_product(self,data : dict) -> Product:
         return Product.get_test()
     async def delete_product(self,data : dict) -> bool:

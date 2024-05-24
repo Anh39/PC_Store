@@ -57,15 +57,11 @@ class Voucher(BaseModel):
         return result
 
 class Cart(BaseModel):
-    products : list['Product']
-    voucher : Voucher | None
-    value : float 
+    items : list[dict]
     @classmethod
     def get_test(cls):
         result = Cart(
-            products=[Product.get_test()],
-            voucher=Voucher.get_test(),
-            value=123.22
+            products=[Product.get_test()]
         )
         return result
 class ProductImageInfo(BaseModel):

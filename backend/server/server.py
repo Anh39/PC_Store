@@ -1,12 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
 from backend.common import common
-from .post import PostManager
 from .product import ProductManager
 from .user import UserManager
-from .voucher import VoucherManager
 from .validator import UserValidator
 from .media import MediaManager
+from .cart import CartManager
+from .order import OrderManager
 from fastapi.middleware.cors import CORSMiddleware
 
 class FastAPIServer:
@@ -19,11 +19,12 @@ class FastAPIServer:
         
         self.validator = UserValidator()
         
-        self.post = PostManager()
         self.product = ProductManager(self.validator)
         self.user = UserManager(self.validator)
         self.media = MediaManager(self.validator)
-        self.voucher = VoucherManager()
+        self.cart = CartManager(self.validator)
+        self.order = OrderManager(self.validator)
+
         
         self.app.add_middleware(
             CORSMiddleware,
@@ -43,30 +44,24 @@ class FastAPIServer:
         self.app.add_api_route('/user',self.user.change_user_info,methods=['PATCH'],tags=['User'])
         self.app.add_api_route('/user',self.user.get_user_info,methods=['GET'],tags=['User'])
         self.app.add_api_route('/user',self.user.delete_user,methods=['DELETE'],tags=['User'])
-        self.app.add_api_route('/my_cart',self.user.get_cart,methods=['GET'],tags=['User'])
-        self.app.add_api_route('/my_vouchers',self.user.get_vouchers,methods=['GET'],tags=['User'])
-        self.app.add_api_route('/my_orders',self.user.get_orders,methods=['GET'],tags=['User'])
+        
+        self.app.add_api_route('/cart',self.cart.get_cart,methods=['GET'],tags=['Cart'])
+        self.app.add_api_route('/cart',self.cart.add_product_to_cart,methods=['POST'],tags=['Cart'])
+        self.app.add_api_route('/cart',self.cart.increase_decrease_product_in_cart,methods=['PATCH'],tags=['Cart'])
+        self.app.add_api_route('/cart',self.cart.delete_product_in_cart,methods=['DELETE'],tags=['Cart'])
+        self.app.add_api_route('/orders',self.order.get_orders,methods=['GET'],tags=['Order'])
         
         self.app.add_api_route('/image',self.media.upload_image,methods=['POST'],tags=['Media'])
         self.app.add_api_route('/image',self.media.delete_image,methods=['DELETE'],tags=['Media'])
         
         self.app.add_api_route('/product/category',self.product.get_category,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/product',self.product.get_product,methods=['GET'],tags=['Product'])
+        self.app.add_api_route('/recommend',self.product.recommend_products,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/product_detail',self.product.get_product_detail,methods=['GET'],tags=['Product'])
-        self.app.add_api_route('/products',self.product.search_products,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/product',self.product.change_product,methods=['PATCH'],tags=['Product'])
         self.app.add_api_route('/product',self.product.create_product,methods=['POST'],tags=['Product'])
         self.app.add_api_route('/product',self.product.delete_product,methods=['DELETE'],tags=['Product'])
         
-        self.app.add_api_route('/post',self.post.get_post,methods=['GET'],tags=['Post'])
-        self.app.add_api_route('/post',self.post.create_post,methods=['POST'],tags=['Post'])
-        self.app.add_api_route('/post',self.post.change_post,methods=['PATCH'],tags=['Post'])
-        self.app.add_api_route('/post',self.post.delete_post,methods=['DELETE'],tags=['Post'])
-        
-        self.app.add_api_route('/voucher',self.voucher.get_voucher,methods=['GET'],tags=['Voucher'])
-        self.app.add_api_route('/voucher',self.voucher.create_voucher,methods=['POST'],tags=['Voucher'])
-        self.app.add_api_route('/voucher',self.voucher.change_voucher,methods=['PATCH'],tags=['Voucher'])
-        self.app.add_api_route('/voucher',self.voucher.delete_voucher,methods=['DELETE'],tags=['Voucher'])
         
         
     def start(self):

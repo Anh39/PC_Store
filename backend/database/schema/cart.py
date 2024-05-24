@@ -8,9 +8,7 @@ class CartSchema(BaseSchema):
     user_id : Mapped[int] = Column(Integer,ForeignKey('user.id'),primary_key=True)
     owner = relationship('UserSchema',back_populates='have_cart')
     
-    value : Mapped[float]
-    
-    items = relationship('CartItemSchema',back_populates='in_cart')
+    items = relationship('CartItemSchema',back_populates='in_cart',cascade='all, delete-orphan')
     _blacklist = ['owner']
     def model_dump(self) -> dict[str, object]:
         result = super().model_dump()

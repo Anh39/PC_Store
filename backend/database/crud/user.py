@@ -1,8 +1,8 @@
 import json
 from sqlalchemy.orm import Session
 from datetime import datetime,time,date
-from backend.database.crud.base import BaseCRUD
-from backend.database.schema.user import UserSchema
+from .base import BaseCRUD
+from ..schema.user import UserSchema,CartSchema
 from fastapi import Request,Response
 from sqlalchemy import Engine,select,delete,update
 
@@ -12,6 +12,11 @@ class UserCRUD(BaseCRUD):
             user = UserSchema.model_validate(data)
             session.add(user)
             try:
+                session.commit()
+                new_cart = CartSchema()
+                new_cart.user_id = user.id
+                session.add(new_cart)
+                print(new_cart)
                 session.commit()
                 return Response(status_code=200)
             except:
@@ -77,26 +82,7 @@ class UserCRUD(BaseCRUD):
             for result in results:
                 response_results.append(result[0].model_dump())
             return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)
-
-    async def get_cart(
-            self,
-            token : str | None = None
-        ) -> Response:
-        with Session(self.engine) as session:
-            query = select(UserSchema)
-            if (token != None):
-                query = query.where(UserSchema.token == token)
-            results = session.execute(query)
-            response_results = {}
-            for result in results:
-                cart = result[0].have_cart
-                if (cart == []):
-                    response_results = {}
-                else:
-                    response_results = cart.model_validate()
-                break
-            return Response(content=json.dumps(response_results),media_type='application/json',status_code=200)
-        
+   
     async def get_order(
             self,
             token : str | None = None
