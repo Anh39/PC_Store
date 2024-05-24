@@ -9,9 +9,15 @@ def process_flow(file_path : str):
     with open(file_path,'r') as file:
         data = json.loads(file.read())
     if ('lap' in file_path):
-        data['category'] = 'lap'
+        data['category'] = 'laptop'
     elif ('pc' in file_path):
         data['category'] = 'pc'
+    elif ('display' in file_path):
+        data['category'] = 'display'
+    elif ('auxility' in file_path):
+        data['category'] = 'auxility'
+    else:
+        data['category'] = 'other'
     if (data['info'] == None):
         data['info'] = []
     else:

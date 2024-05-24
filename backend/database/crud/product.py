@@ -4,7 +4,8 @@ from ..schema.product import ProductSchema
 from ..schema.map import MapSchema
 from sqlalchemy.orm import Session
 from fastapi import Request,Response
-from sqlalchemy import Engine,select,delete,update
+from sqlalchemy import Engine,select,delete,update,func
+from typing import Literal
 
 class ProductCRUD(BaseCRUD):
     async def full_create(self,data : dict) ->Response:
@@ -28,12 +29,18 @@ class ProductCRUD(BaseCRUD):
                 return Response(status_code=404)
     async def full_get(
             self,
-            id : int | None = None
+            id : int | None = None,
+            mode : str = Literal['random'],
+            offset : int = 0,
+            limit : int = 50
         ) -> Response:
         with Session(self.engine) as session:
             query = select(ProductSchema)
             if (id != None):
                 query = query.where(ProductSchema.id == id)
+            if (mode == 'random'):
+                query = query.order_by(func.random())
+            query = query.offset(offset).limit(limit)
             results = session.execute(query)
             response_results = []
             for result in results:
