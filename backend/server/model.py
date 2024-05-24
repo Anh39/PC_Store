@@ -68,23 +68,23 @@ class Cart(BaseModel):
             value=123.22
         )
         return result
-
+class ProductImageInfo(BaseModel):
+    path : str
+    order : int
 class Product(BaseModel):
     id : int | None = None
-    time_created : str = "2024-1-1 0:0:0"
-    time_modified : str = "2024-1-1 0:0:0"
     price : float 
-    infos : dict[str,object]
+    thumbnail : str
+    images : list[ProductImageInfo]
     name : str
-    ratings : list['Rating'] = []
+    class Config:
+        extra = 'allow'
     @classmethod
     def get_test(cls):
         result = Product(
             id=12,
-            time_created='time_created',
-            time_modified='time_modified',
             price=123.2,
-            infos={'info' : 'indws'},
+            images=[],
             name='test_product',
             ratings=[Rating.get_test()]
         )

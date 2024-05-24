@@ -10,11 +10,8 @@ class CartSchema(BaseSchema):
     
     value : Mapped[float]
     
-    voucher_id = Column(Integer,ForeignKey('voucher.id'))
-    voucher = relationship('VoucherSchema')
-    
     items = relationship('CartItemSchema',back_populates='in_cart')
-    _blacklist = ['owner','voucher']
+    _blacklist = ['owner']
     def model_dump(self) -> dict[str, object]:
         result = super().model_dump()
         return result
@@ -24,5 +21,4 @@ class CartSchema(BaseSchema):
         return result
     
 from .user import UserSchema
-from .voucher import VoucherSchema
 from .cart_item import CartItemSchema

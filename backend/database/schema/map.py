@@ -9,7 +9,7 @@ class MapSchema(BaseSchema):
     key : Mapped[str] = mapped_column(primary_key=True)
     value : Mapped[str] = mapped_column(nullable=True)
     
-    product = relationship('ProductSchema',back_populates=None)
+    product = relationship('ProductSchema',back_populates='infos')
     product_id = Column(Integer,ForeignKey('product.id'),primary_key=True)
     
     _blacklist = ['product']

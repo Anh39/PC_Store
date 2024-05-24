@@ -13,22 +13,15 @@ class DatabaseServer:
         self.host : str = config['host']
         self.port : int = config['port']
         self.app : FastAPI = FastAPI()
-        self.engine : Engine = create_engine("sqlite:///"+'database.db',echo=False)
-        logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
+        self.engine : Engine = create_engine("sqlite:///"+'database.db',echo=True)
         BaseSchema.metadata.create_all(self.engine)
         
         self.cruds : dict[str,BaseCRUD] = {
             'cart' : CartCRUD(),
-            'cart_item' : CartItemCRUD(),
-            'cart' : CartCRUD(),
-            'map' : MapCRUD(),
-            'order_item' : OrderItemCRUD(),
             'order' : OrderCRUD(),
-            'post' : PostCRUD(),
             'product' : ProductCRUD(),
-            'rating' : RatingCRUD(),
             'user' : UserCRUD(),
-            'voucher' : VoucherCRUD()
+            'map' : MapCRUD()
         }
         for key in self.cruds:
             self.cruds[key].engine = self.engine
