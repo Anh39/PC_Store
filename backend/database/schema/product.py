@@ -11,6 +11,7 @@ class ProductSchema(BaseSchema):
     name : Mapped[str]
     price : Mapped[float]
     thumbnail : Mapped[str]
+    category : Mapped[str]
     infos = relationship('MapSchema',back_populates='product',cascade='all, delete-orphan')
     images = relationship('ProductImageSchema',back_populates='product',cascade='all, delete-orphan')
     _blacklist = ['infos']

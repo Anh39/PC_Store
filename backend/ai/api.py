@@ -18,7 +18,7 @@ class DatabaseAPI(BaseDBAPI):
         self
     ) -> dict[str,object]:
         try:
-            async with(self.session.get(url='/product/full',params={'limit' : 999999,'mode' : '-'},headers=headers)) as response:
+            async with(self.session.get(url='/product/full',params={'limit' : 999999,'mode' : 'none'},headers=headers)) as response:
                 if (response.status == 200):
                     results : list[dict] = await response.json()
                     final_results = {}

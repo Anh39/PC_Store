@@ -18,7 +18,7 @@ class CartManager:
             token=token
         )
         if (len(result) == 0):
-            result = {}
+            return []
         return Cart.model_validate(result).items
     async def add_product_to_cart(self,body : CartChangeRequest,token : str = get_token()):
         return await self.__change_cart(body.id,token,command='Add')

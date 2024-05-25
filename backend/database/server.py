@@ -13,7 +13,7 @@ class DatabaseServer:
         self.host : str = config['host']
         self.port : int = config['port']
         self.app : FastAPI = FastAPI()
-        self.engine : Engine = create_engine("sqlite:///"+'database.db',echo=False)
+        self.engine : Engine = create_engine("sqlite:///"+'database.db',echo=True)
         BaseSchema.metadata.create_all(self.engine)
         
         self.cruds : dict[str,BaseCRUD] = {

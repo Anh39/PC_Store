@@ -19,10 +19,10 @@ class ProductManager:
         if (valid):
             if (self.category_cache != None):
                 return self.category_cache
-            list_data = await self.product_api.get_category()
+            list_data = await self.product_api.get_product({})
             result = set()
             for row in list_data:
-                result.add(row['value'])
+                result.add(row['category'])
             self.category_cache = list(result)
             return self.category_cache
         else:
@@ -36,7 +36,7 @@ class ProductManager:
             if (result):
                 return result
         return None
-    async def get_product(self,id : int | None = None,mode : Literal['random','none'] = 'random',offset : int = 0,limit : int = 50,name : str | None = None,token : str | None = get_token()) -> list:
+    async def get_product(self,id : int | None = None,mode : Literal['random','none'] = 'random',offset : int = 0,limit : int = 50,name : str | None = None,category : str | None = None,token : str | None = get_token()) -> list:
         validate_result = await self.validator.guest_validate(token)
         if (validate_result):
             dict_data = {
@@ -44,13 +44,14 @@ class ProductManager:
                 'mode' : mode,
                 'offset' : offset,
                 'limit' : limit,
-                'name' : name
+                'name' : name,
+                'category' : category
             }
             print(dict_data)
             result = await self.product_api.get_product(dict_data)
             if (result):
                 return result
-        return False
+        return []
     async def get_product_detail(self,id : int | None = None,mode : Literal['random','none'] = 'random',offset : int = 0,limit : int = 50,token : str | None = get_token()) -> list:
         validate_result = await self.validator.guest_validate(token)
         if (validate_result):
