@@ -18,7 +18,7 @@ function CartList(props) {
         }
 
         fetchAPI();
-    }, [cart]);
+    }, [onReload]);
 
     return (
         <>

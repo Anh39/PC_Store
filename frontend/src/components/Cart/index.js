@@ -32,16 +32,18 @@ function Cart() {
             fetchAPI();
             setCart([]);
         }
+        setReload(!reload);
     }
 
     const [cart, setCart] = useState();
 
     useEffect(() => {
         fetchAPI();
-    }, [total, cart]);
+    }, [reload]);
 
     const handleReload = () => {
         fetchAPI();
+        setReload(!reload);
     }
 
     const Payment = async () => {
