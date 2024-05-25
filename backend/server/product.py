@@ -77,7 +77,10 @@ class ProductManager:
             product_result = product_result[0]
             product_results.append(product_result)
         return product_results
-    async def change_product(self,data : dict) -> Product:
-        return Product.get_test()
-    async def delete_product(self,data : dict) -> bool:
-        return True
+    async def change_product(self,id : int,data : dict) -> bool:
+        return await self.product_api.update_product(
+            id=id,
+            data=data
+        )
+    async def delete_product(self,id : int, token : str = get_token()) -> bool:
+        return await self.product_api.delete(id)

@@ -61,25 +61,39 @@ class ProductDBAPI(BaseDBAPI):
         except Exception as e:
             print(e)
             return False
-    
-    async def get_product(
+        
+    async def update_product(
         self,
-        data : dict[str,object|None]
-    ) -> dict[str,object]:
+        id : int,
+        data : dict[str,object]
+    ) -> bool:
         try:
-            del_keys = []
-            for key in data:
-                if (data[key] == None):
-                    del_keys.append(key)
-            for key in del_keys:
-                data.pop(key)
-            async with(self.session.get(url='/product',params = data,headers=headers)) as response:
+            async with(self.session.patch(url='/product/full',params={'id' : id},data = json.dumps(data),headers=headers)) as response:
                 if (response.status == 200):
-                    result = await response.json()
-                    return result
+                    result = await response.text()
+                    return True
                 else:
-                    print('ERR')
+                    return False
         except Exception as e:
             print(e)
+            return False
+    
+    async def delete(
+        self,
+        id : int
+    ) -> bool:
+        try:
+            params = {
+                'id' : id
+            }
+            async with(self.session.delete(url='/product',params = params,headers=headers)) as response:
+                if (response.status == 200):
+                    return True
+                else:
+                    print('ERR')
+                    return False
+        except Exception as e:
+            print(e)
+            return False
     
     

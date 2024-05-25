@@ -1,6 +1,6 @@
 import { Button, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { deleteProduct } from '../../../Services/productService';
+import { deleteProduct } from '../../../Services/backend/product';
 
 function DeleteProduct(props) {
     const { item, onReload } = props;

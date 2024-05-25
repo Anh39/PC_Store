@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Modal, Select, Space, Spin, notification } from "antd";
-import { editProduct } from "../../../Services/productService";
+import { updateProduct } from "../../../Services/backend/product";
 import { EditOutlined } from "@ant-design/icons";
 import { getCategoryList, getProductDetail } from "../../../Services/backend/product";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
@@ -57,23 +57,23 @@ function EditProduct(props) {
 
     const handleSubmit = async (e) => {
         console.log(e);
-        // setSpinning(true);
-        // const result = await editProduct(item.id, e);
-        // setTimeout(() => {
-        //     if (result) {
-        //         form.resetFields();
-        //         api.success({
-        //             message: "Cập nhật sản phẩm thành công"
-        //         });
-        //         setShowModal(false);
-        //         onReload();
-        //     } else {
-        //         api.error({
-        //             message: "Cập nhật sản phẩm thất bại"
-        //         });
-        //     }
-        //     setSpinning(false);
-        // }, 100);
+        setSpinning(true);
+        const result = await updateProduct(item.id, e);
+        setTimeout(() => {
+            if (result) {
+                form.resetFields();
+                api.success({
+                    message: "Cập nhật sản phẩm thành công"
+                });
+                setShowModal(false);
+                onReload();
+            } else {
+                api.error({
+                    message: "Cập nhật sản phẩm thất bại"
+                });
+            }
+            setSpinning(false);
+        }, 100);
     }
 
     return (
