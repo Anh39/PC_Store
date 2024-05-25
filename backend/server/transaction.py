@@ -41,6 +41,9 @@ class TransactionManager:
             return RedirectResponse(url=self.failure_url)
             return HTTPException(401)
     async def create_payment(self,token : str = get_token(None)):
+        valid = self.validator.validate(token)
+        if (not valid):
+            raise HTTPException(status_code=401)
         cart_items = await self.cart_manager.get_cart(token)
         items = []
         total = 0

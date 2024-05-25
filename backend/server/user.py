@@ -66,7 +66,10 @@ class UserManager:
     #         password=request.confirm_password
     #     )
     #     return result
-    async def change_user_info(self,request : ChangeUserInfoRequest,token : str = get_token(None)) -> bool: # completed
+    async def change_user_info(self,request : ChangeUserInfoRequest,token : str = get_token()) -> bool: # completed
+        valid = self.validator.validate(token)
+        if (not valid):
+            raise HTTPException(status_code=401)
         result = await self.user_api.update_user(
             token=token,
             password=request.confirm_password,
