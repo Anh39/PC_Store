@@ -1,11 +1,12 @@
 from fastapi import HTTPException,Response,Header
+from fastapi.responses import RedirectResponse
 from fastapi.responses import JSONResponse
 from .validator import UserValidator
 from .cart import CartManager
 from .order import OrderManager
 import paypalrestsdk
 import asyncio
-from backend.common import folder_path
+from backend.common import folder_path,common
 
 paypalrestsdk.configure(folder_path.API.get_paypal_configure())
 get_token = Header
@@ -16,6 +17,10 @@ class TransactionManager:
         self.payment_queue : dict[str] = {}
         self.cart_manager : CartManager = cart_manager
         self.order_manager : OrderManager = order_manager
+        self.return_url = common.get_url(common.get_config('server')) + 'transaction/return'
+        self.sucess_url = common.get_url(common.get_config('react')) + ''
+        self.failure_url = common.get_url(common.get_config('react')) + ''
+        self.cancel_url = common.get_url(common.get_config('react'))
     def convert(self,vnd : str) -> str:
         return str(float(vnd)/25000)
     async def payment_return(self,
@@ -23,14 +28,18 @@ class TransactionManager:
             token : str,
             PayerID : str
         ):
-        if (paymentId not in self.payment_queue):
-            return Response(status_code=404,content='Payment not found')
-        else:
-            value = self.payment_queue.pop(paymentId)
-            await self.excute_payment(paymentId,PayerID)
-            await self.order_manager.create_order(token=value)
-            await self.cart_manager.delete_product_in_cart(id=-1,token=value)
-            return Response(status_code=200,content='Payment success, please return to store')
+        try:
+            if (paymentId not in self.payment_queue):
+                return Response(status_code=404,content='Payment not found')
+            else:
+                value = self.payment_queue.pop(paymentId)
+                await self.excute_payment(paymentId,PayerID)
+                await self.order_manager.create_order(token=value)
+                await self.cart_manager.delete_product_in_cart(id=-1,token=value)
+                return RedirectResponse(url=self.sucess_url)
+        except Exception as e:
+            return RedirectResponse(url=self.failure_url)
+            return HTTPException(401)
     async def create_payment(self,token : str = get_token(None)):
         cart_items = await self.cart_manager.get_cart(token)
         items = []
@@ -51,8 +60,8 @@ class TransactionManager:
                 "payment_method" : "paypal"
             },
             "redirect_urls" : {
-                "return_url" : "http://127.0.0.1:8000/transaction/return",
-                "cancel_url" : "http://127.0.0.1:8000/transaction/cancel"
+                "return_url" : self.return_url,
+                "cancel_url" : self.cancel_url
             },
             "transactions" : [{
                 "item_list" : {
