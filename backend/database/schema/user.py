@@ -17,7 +17,6 @@ class UserSchema(BaseSchema):
     gender : Mapped[str] = mapped_column(nullable=True)
     address : Mapped[str] = mapped_column(nullable=True)
     avatar : Mapped[str] = mapped_column(nullable=True)
-    card : Mapped[str] = mapped_column(nullable=True)
     
     have_cart = relationship('CartSchema',back_populates='owner')
     have_orders = relationship('OrderSchema',back_populates='owner',cascade='all, delete-orphan')

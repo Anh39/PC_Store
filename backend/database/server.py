@@ -20,8 +20,7 @@ class DatabaseServer:
             'cart' : CartCRUD(),
             'order' : OrderCRUD(),
             'product' : ProductCRUD(),
-            'user' : UserCRUD(),
-            'map' : MapCRUD()
+            'user' : UserCRUD()
         }
         for key in self.cruds:
             self.cruds[key].engine = self.engine

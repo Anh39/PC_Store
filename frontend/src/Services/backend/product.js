@@ -137,9 +137,9 @@ export const updateProduct = async (id,option) => {
         option[`basic_info_${i}`] = option.basic_infos[i]
     }
     data['thumbnail'] = data.images[0].path
-    data['name'] = 'abc'
+    // data['name'] = 'abc'
     delete option.basic_infos
-
+    console.log(data)
     const result = await patch(`product?id=${id}`,data)
     if (result != null) {
        const id = await result.text()

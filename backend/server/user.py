@@ -52,22 +52,20 @@ class UserManager:
                 success=False,
                 token=None
             )
-    async def reset_password(self,request : ResetPasswordRequest) -> str:
-        return 'reset_password'
-    async def get_user_info(self,token : str = get_token(None)) -> User: # get minimum info only # Partly completed
-        result = await self.user_api.get_user({
-            'token' : token
-        })
-        if (len(result) > 0):
-            return User.model_validate(result[0])
-        else:
-            raise HTTPException(status_code=404)
-    async def delete_user(self,request : ChangeUserInfoRequest,token : str = get_token(None)) -> bool: # completed
-        result = await self.user_api.delete_user(
-            token=token,
-            password=request.confirm_password
-        )
-        return result
+    # async def get_user_info(self,token : str = get_token(None)) -> User: # get minimum info only # Partly completed
+    #     result = await self.user_api.get_user({
+    #         'token' : token
+    #     })
+    #     if (len(result) > 0):
+    #         return User.model_validate(result[0])
+    #     else:
+    #         raise HTTPException(status_code=404)
+    # async def delete_user(self,request : ChangeUserInfoRequest,token : str = get_token(None)) -> bool: # completed
+    #     result = await self.user_api.delete_user(
+    #         token=token,
+    #         password=request.confirm_password
+    #     )
+    #     return result
     async def change_user_info(self,request : ChangeUserInfoRequest,token : str = get_token(None)) -> bool: # completed
         result = await self.user_api.update_user(
             token=token,

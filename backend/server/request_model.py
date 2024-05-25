@@ -8,10 +8,6 @@ class LoginRequest(BaseModel):
 class RegisterRequest(LoginRequest):
     username : str | None
     
-class ResetPasswordRequest(BaseModel):
-    email : str | None
-    code : str | None
-    
 class ChangeUserInfoRequest(BaseModel):
     confirm_password : str
     data : dict[str,object]

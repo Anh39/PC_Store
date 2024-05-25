@@ -98,7 +98,7 @@ function EditProduct(props) {
                         initialValues={product}
                     >
                         <Form.Item
-                            name="title"
+                            name="name"
                             label="Tiêu đề"
                         >
                             <Input defaultValue={product.name} />
