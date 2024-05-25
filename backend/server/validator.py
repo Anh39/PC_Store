@@ -4,7 +4,7 @@ class UserValidator:
     def __init__(self) -> None:
         self.user_api = UserDBAPI()
         self.user_api.start()
-        self.bypast = True
+        self.bypast = False
     async def validate(self,token : str ) -> bool: # Untest
         if (self.bypast):
             return True

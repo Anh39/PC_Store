@@ -59,7 +59,7 @@ class UserCRUD(BaseCRUD):
                 return Response(status_code=404)
     async def get(
             self,
-            id : str | None = None,
+            id : int | None = None,
             token : str | None = None,
             email : str | None = None,
             name : str | None = None,

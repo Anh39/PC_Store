@@ -4,7 +4,7 @@ from backend.common import common
 from .product import ProductManager
 from .user import UserManager
 from .validator import UserValidator
-from .media import MediaManager
+# from .media import MediaManager
 from .cart import CartManager
 from .order import OrderManager
 from .transaction import TransactionManager
@@ -22,7 +22,7 @@ class FastAPIServer:
         
         self.product = ProductManager(self.validator)
         self.user = UserManager(self.validator)
-        self.media = MediaManager(self.validator)
+        # self.media = MediaManager(self.validator)
         self.cart = CartManager(self.validator)
         self.order = OrderManager(self.validator)
         self.transaction = TransactionManager(self.validator,self.cart,self.order)
@@ -41,10 +41,10 @@ class FastAPIServer:
     def _add_route(self):
         self.app.add_api_route('/login',self.user.login,methods=['POST'],tags=['User'])
         self.app.add_api_route('/register',self.user.register,methods=['POST'],tags=['User'])
-        self.app.add_api_route('/reset_password',self.user.reset_password,methods=['PATCH'],tags=['User'])
+        # self.app.add_api_route('/reset_password',self.user.reset_password,methods=['PATCH'],tags=['User'])
         self.app.add_api_route('/user',self.user.change_user_info,methods=['PATCH'],tags=['User'])
-        self.app.add_api_route('/user',self.user.get_user_info,methods=['GET'],tags=['User'])
-        self.app.add_api_route('/user',self.user.delete_user,methods=['DELETE'],tags=['User'])
+        # self.app.add_api_route('/user',self.user.get_user_info,methods=['GET'],tags=['User'])
+        # self.app.add_api_route('/user',self.user.delete_user,methods=['DELETE'],tags=['User'])
         
         self.app.add_api_route('/cart',self.cart.get_cart,methods=['GET'],tags=['Cart'])
         self.app.add_api_route('/cart',self.cart.add_product_to_cart,methods=['POST'],tags=['Cart'])
@@ -54,8 +54,8 @@ class FastAPIServer:
         self.app.add_api_route('/order',self.order.create_order,methods=['POST'],tags=['DEBUG'])
         self.app.add_api_route('/order',self.order.change_order,methods=['PATCH'],tags=['Order'])
         
-        self.app.add_api_route('/image',self.media.upload_image,methods=['POST'],tags=['Media'])
-        self.app.add_api_route('/image',self.media.delete_image,methods=['DELETE'],tags=['Media'])
+        # self.app.add_api_route('/image',self.media.upload_image,methods=['POST'],tags=['Media'])
+        # self.app.add_api_route('/image',self.media.delete_image,methods=['DELETE'],tags=['Media'])
         
         self.app.add_api_route('/product/category',self.product.get_category,methods=['GET'],tags=['Product'])
         self.app.add_api_route('/product',self.product.get_product,methods=['GET'],tags=['Product'])

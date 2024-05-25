@@ -72,46 +72,6 @@ class UserDBAPI(BaseDBAPI):
         except Exception as e:
             print(e)
             return False
-    async def _get_user_relation(
-        self,
-        kind : Literal['order','cart','rating','voucher'],
-        token : str
-    ) -> dict[str,object] | list[dict[str,object]]:
-        try:
-            params = {
-                'token' : token
-            }
-            async with(self.session.get(url='/user/{}'.format(kind),params = params,headers=headers)) as response:
-                if (response.status == 200):
-                    result = await response.json()
-                    return result
-                else:
-                    print('ERR')
-        except Exception as e:
-            print(e)
-    
-    
-    async def get_user_voucher(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('order',token)
-    
-    async def get_user_cart(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('cart',token)
-    
-    async def get_user_voucher(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('voucher',token)
-    
-    async def get_user_rating(
-        self,
-        token : dict[str,object]
-    ) -> list[dict[str,object]]:
-        return await self._get_user_relation('rating',token)
+
+
     

@@ -17,7 +17,7 @@ class MapSchema(BaseSchema):
         result = super().model_dump()
         return result
     @classmethod
-    def model_validate(cls, data: dict[str, object]) -> BaseSchema:
+    def model_validate(cls, data: dict[str, object]) -> 'MapSchema':
         result = super()._model_validate(data,MapSchema)
         return result
     
