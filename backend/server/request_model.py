@@ -1,19 +1,21 @@
 from pydantic import BaseModel
+from typing import Literal
 
 class LoginRequest(BaseModel):
     email : str
     password : str
     
 class RegisterRequest(LoginRequest):
-    username : str
+    username : str | None
     
 class ResetPasswordRequest(BaseModel):
     email : str | None
     code : str | None
     
 class ChangeUserInfoRequest(BaseModel):
-    password : str
+    confirm_password : str
     data : dict[str,object]
     
-class ChangeCartRequest(BaseModel):
-    data : dict[str,object]
+class CartChangeRequest(BaseModel):
+    id : int
+    amount : int | None = None

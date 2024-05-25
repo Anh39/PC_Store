@@ -6,6 +6,7 @@ class AuthenticationResponse(BaseModel):
         min_length=0,
         max_length=50
     )
+    role : str | None = 'Customer'
     @classmethod
     def get_test(cls):
         result = AuthenticationResponse(
@@ -56,34 +57,30 @@ class Voucher(BaseModel):
         return result
 
 class Cart(BaseModel):
-    products : list['Product']
-    voucher : Voucher | None
-    value : float 
+    items : list[dict]
     @classmethod
     def get_test(cls):
         result = Cart(
-            products=[Product.get_test()],
-            voucher=Voucher.get_test(),
-            value=123.22
+            products=[Product.get_test()]
         )
         return result
-
+class ProductImageInfo(BaseModel):
+    path : str
+    order : int
 class Product(BaseModel):
-    id : int
-    time_created : str
-    time_modified : str
-    price : float
-    infos : dict[str,object]
+    id : int | None = None
+    price : float 
+    thumbnail : str
+    images : list[ProductImageInfo]
     name : str
-    ratings : list['Rating'] = []
+    class Config:
+        extra = 'allow'
     @classmethod
     def get_test(cls):
         result = Product(
             id=12,
-            time_created='time_created',
-            time_modified='time_modified',
             price=123.2,
-            infos={'info' : 'indws'},
+            images=[],
             name='test_product',
             ratings=[Rating.get_test()]
         )
@@ -106,16 +103,20 @@ class Post(BaseModel):
         )
         return result
 
+class OrderInfo(BaseModel):
+    address : str | None
+    phone : str | None
+
 class Order(BaseModel):
     id : int
-    items : list['OrderItem']
-    status : str
-    time_created : str
-    time_completed : str
-    value : float
-    address : str
-    phone : str
-    user_id : int
+    items : list[dict] | None
+    status : str | None
+    time_created : str | None
+    time_completed : str | None
+    value : float | None
+    address : str | None
+    phone : str | None
+    user_id : int | None
     @classmethod
     def get_test(cls):
         result = Order(
@@ -155,3 +156,4 @@ class Rating(BaseModel):
             product_id=13222
         )
         return result
+    

@@ -1,44 +1,47 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteItem, updateQuantity } from "../../actions/cart";
-import { useRef } from "react";
+// import { useRef, useState } from "react";
+import { Button, InputNumber } from "antd";
+import { changeCartAmount, deleteCartProduct } from "../../Services/backend/cart";
+import { useEffect, useState } from "react";
 function CartItem(props) {
-    const { item } = props;
-    const inputRef = useRef();
+    const { item, onReload } = props;
     const dispatch = useDispatch();
+    const cartRedux = useSelector(state => state.cartReducer);
 
-    const handleDown = () => {
-        if (item.quantity > 1) {
-            dispatch(updateQuantity(item.id, -1));
-            inputRef.current.value = parseInt(inputRef.current.value) - 1;
-        }
+    const ChangeQuantity = async (value) => {
+        // dispatch(updateQuantity(item.id, value));
+        const response = await changeCartAmount(item.id, value);
+        console.log(response);
+        onReload();
     }
 
-    const handleUp = () => {
-        dispatch(updateQuantity(item.id));
-        inputRef.current.value = parseInt(inputRef.current.value) + 1;
-    }
-
-    const handleDelete = () => {
+    const handleDelete = async () => {
         dispatch(deleteItem(item.id));
+        const response = await deleteCartProduct(item.id);
+        console.log(response);
+        onReload();
     }
+
+    useEffect(() => {
+        onReload();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cartRedux]);
 
     return (
         <>
-            <div className="cart__item" key={item.info.id}>
-                <img className="cart__image" src={item.info.thumbnail} alt={item.info.title} />
+            <div className="cart__item" key={item.id}>
+                <div className="cart__image">
+                    <img src={item.thumbnail} alt={item.name} />
+                </div>
                 <div className="cart__content">
-                    <h4 className="cart__tilte">{item.info.title}</h4>
-                    <div className="cart__price-new">
-                        {(item.info.price * (100 - item.info.discountPercentage) / 100).toFixed(0)}$
-                    </div>
-                    <div className="cart__price-old">{item.info.price}$</div>
+                    <h4 className="cart__tilte">{item.name}</h4>
+                    <div className="cart__price-new">{item.price}đ</div>
                 </div>
                 <div className="cart__quantity">
-                    <button onClick={handleDown}>-</button>
-                    <input ref={inputRef} defaultValue={item.quantity} />
-                    <button onClick={handleUp}>+</button>
+                    <InputNumber min={1} defaultValue={item.amount} onChange={ChangeQuantity} />
                 </div>
-                <button onClick={handleDelete}>Xóa</button>
+                <Button onClick={handleDelete}>Xóa</Button>
             </div>
         </>
     )

@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../actions/cart";
-import { Card } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "./DisplayProduct.scss";
+import { Button } from "antd";
+import { addProductToCart } from "../../../Services/backend/cart";
 
 function ProductItem(props) {
     const { item } = props;
@@ -10,36 +12,33 @@ function ProductItem(props) {
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cartReducer);
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (cart.some(itemCart => itemCart.id === item.id)) {
-            // dispatch(updateQuantity(item.id));
+            alert("sản phẩm đã được thêm vào giỏ từ trước");
         } else {
             dispatch(addToCart(item.id, item));
+            const response = await addProductToCart(item.id);
+            console.log(response);
         }
     }
 
     const ToDetail = () => {
-        navigate(`/product/${item.id}`)
+        navigate(`/product/${item.id}`);
     }
 
     return (
         <>
-            <Card
-                hoverable
-                bordered={false}
-                size="small"
-                onClick={ToDetail}
-                cover={<img className="product__image mb-5" src={item.thumbnail} alt={item.title} />}
-            >
-                <h4 className="product__title mb-5">{item.title}</h4>
-                <div className="product__price-new mb-5">
-                    {(item.price * (100 - item.discountPercentage) / 100).toFixed(0)}$
+            <div className="product__item" key={item.index}>
+                <div>
+                    <img className="product__img" src={item.thumbnail} alt={item.title} onClick={ToDetail} />
+                    <h4 className="product__title"> <Link to={`/product/${item.id}`}>{item.name}</Link></h4>
                 </div>
-                <div className="product__price-old mb-5">{item.price}$</div>
-                <div className="product__percent mb-5">{item.discountPercentage}%</div>
-                <button >Mua ngay</button>
-                <button onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
-            </Card>
+                <div>
+                    <div className="product__price-new">{item.price}đ</div>
+                    <div className="product__price-old">{item.full_price}</div>
+                    <Button onClick={handleAddToCart} className="product__button">Thêm vào giỏ hàng</Button>
+                </div>
+            </div>
         </>
     )
 }

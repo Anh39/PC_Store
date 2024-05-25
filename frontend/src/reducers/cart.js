@@ -10,7 +10,7 @@ const cartReducer = (state = [], action) => {
             }];
         case "UPDATE_QUANTITY":
             const itemUpdate = newState.find(item => item.id === action.id);
-            itemUpdate.quantity += action.quantity;
+            itemUpdate.quantity = action.amount;
             return newState;
         case "DELETE_ITEM":
             newState = newState.filter(item => item.id !== action.id);

@@ -16,7 +16,6 @@ def get_config(module_name : str = 'all'):
 def gen_key(username : str = None,password : str = None):
     token = str(uuid.uuid4())
     return token
-
 def get_url(config : dict) -> str:
     return 'http://' + config['host']+':'+str(config['port']) + '/'
 class Util:

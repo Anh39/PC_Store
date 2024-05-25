@@ -1,6 +1,6 @@
-import Swal from 'sweetalert2/dist/sweetalert2.js';
-import 'sweetalert2/src/sweetalert2.scss';
-import { deleteProduct } from '../../services/productService';
+import { Button, Popconfirm } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { deleteProduct } from '../../../Services/productService';
 
 function DeleteProduct(props) {
     const { item, onReload } = props;
@@ -9,33 +9,21 @@ function DeleteProduct(props) {
         const result = await deleteProduct(item.id);
         if (result) {
             onReload();
-            Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-            )
+            alert("Xóa sản phẩm thành công");
+        } else {
+            alert("Xóa sản phẩm thất bại");
         }
     }
 
     const handleDelete = () => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteItem();
-            }
-        })
+        deleteItem();
     }
 
     return (
         <>
-            <button onClick={handleDelete}>Delete</button>
+            <Popconfirm title="Bạn có chắc muốn xóa không" onConfirm={handleDelete}>
+                <Button danger icon={<DeleteOutlined />} />
+            </Popconfirm>
         </>
     )
 }

@@ -1,24 +1,52 @@
 import { useEffect, useState } from "react";
-import Modal from "react-modal";
-import Swal from 'sweetalert2/dist/sweetalert2.js';
-import 'sweetalert2/src/sweetalert2.scss';
-import { getCategoryList } from "../../services/categoryService";
-import { createProduct } from "../../services/productService";
+import { Button, Form, Input, InputNumber, Modal, Select, Space, message } from "antd";
+import { getCategoryList } from "../../../Services/backend/product";
+import { createProduct } from "../../../Services/backend/product";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
 
 function CreateProduct(props) {
     const { onReload } = props;
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState({});
-    const [dataCategory, setDataCategory] = useState({});
+    const [dataCategory, setDataCategory] = useState([]);
+    const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const handleSubmit = async (data) => {
+        const product_id = await createProduct(data);
+        if (product_id != null) {
+            console.log(product_id);
+            form.resetFields();
+            messageApi.open({
+                type: 'success',
+                content: "Tạo mới sản phẩm thành công"
+            });
+            onReload();
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: "Tạo phòng thất bại"
+            });
+        }
+    }
+
+    const rules = [
+        {
+            required: true,
+            message: "bắt buộc"
+        }
+    ];
 
     useEffect(() => {
         const fetchApi = async () => {
             const result = await getCategoryList();
+            console.log(result);
             setDataCategory(result);
         }
 
         fetchApi();
-    });
+    }, []);
 
     const customStyles = {
         content: {
@@ -38,86 +66,104 @@ function CreateProduct(props) {
     const closeModal = () => {
         setShowModal(false);
     }
-
-    const handleChange = (e) => {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value
-        });
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const result = await createProduct(data);
-        if (result) {
-            setShowModal(false);
-            onReload();
-            Swal.fire({
-                icon: "success",
-                title: "Bạn đã tạo mới thành công",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        }
-    };
     return (
         <>
-            <button onClick={openModal} required>Tạo sản phẩm mới</button>
+            {contextHolder}
+
+            <Button onClick={openModal} required>Tạo sản phẩm mới</Button>
 
             <Modal
-                isOpen={showModal}
-                onRequestClose={closeModal}
+                open={showModal}
+                onCancel={closeModal}
                 style={customStyles}
-                contentLabel="Example Modal"
             >
-                <form onSubmit={handleSubmit}>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Tiêu đề</td>
-                                <td><input type="text" name="title" onChange={handleChange} /></td>
-                            </tr>
-                            {dataCategory.length > 0 && (
-                                <tr>
-                                    <td>Danh mục</td>
-                                    <td>
-                                        <select name="category" onChange={handleChange}>
-                                            {dataCategory.map((item, index) => (
-                                                <option key={index} value={item}>{item}</option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                </tr>
-                            )}
-                            <tr>
-                                <td>Giá</td>
-                                <td><input type="text" name="price" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Giảm giá</td>
-                                <td><input type="text" name="price" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Số lượng còn lại</td>
-                                <td><input type="text" name="stock" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Đường dẫn ảnh</td>
-                                <td><input type="text" name="thumbnail" onChange={handleChange} required /></td>
-                            </tr>
-                            <tr>
-                                <td>Mô tả</td>
-                                <td>
-                                    <textarea rows={4} name="description" onChange={handleChange}></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><button onClick={closeModal}>Hủy</button></td>
-                                <td><input type="submit" value="create" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+                <Form layout="vertical" name="create-room" onFinish={handleSubmit} form={form}>
+                    <Form.Item
+                        name="name"
+                        label="Tiêu đề"
+                        rules={rules}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="price"
+                        label="Giá"
+                        rules={rules}
+                    >
+                        <InputNumber min={1} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="stock"
+                        label="Số lượng còn lại"
+                    >
+                        <InputNumber min={1} />
+                    </Form.Item>
+
+                    <Form.Item name="category" label="Danh mục">
+                        <Select>
+                            {dataCategory.map((item, index) => (
+                                <Option key={index} value={item}>{item}</Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+
+                    <Form.List name="images" label="Link hình ảnh">
+                        {(fields, { add, remove }) => (
+                            <>
+                                {fields.map((value, index) => (
+                                    <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                        <Form.Item name={`${index}.key`}>
+                                        </Form.Item>
+                                        <Form.Item
+                                            name={`${index}.value`}
+                                            label={index === 0 ? 'Hình ảnh' : ''}
+                                        >
+                                            <Input style={{ width: 450 }} placeholder="url" />
+                                        </Form.Item>
+                                        <MinusCircleOutlined onClick={() => remove(index)} />
+                                    </Space>
+                                ))}
+                                <Form.Item>
+                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                        Thêm
+                                    </Button>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
+
+                    <Form.List name="basic_infos">
+                        {(fields, { add, remove }) => (
+                            <>
+                                {fields.map((value, index) => (
+                                    <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                        <Form.Item name={`${index}.key`}>
+                                        </Form.Item>
+                                        <Form.Item
+                                            name={`${index}.value`}
+                                            label={index === 0 ? 'Thông tin' : ''}
+                                        >
+                                            <Input style={{ width: 450 }} placeholder="Information" />
+                                        </Form.Item>
+                                        <MinusCircleOutlined onClick={() => remove(index)} />
+                                    </Space>
+                                ))}
+                                <Form.Item>
+                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                        Thêm
+                                    </Button>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="Submit" >Tạo mới</Button>
+                    </Form.Item>
+                </Form>
+
             </Modal>
         </>
     )
