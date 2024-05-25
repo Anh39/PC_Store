@@ -17,8 +17,8 @@ class CartManager:
         result = await self.cart_api.get_cart(
             token=token
         )
-        if (len(result) == 0):
-            result = {}
+        if (result == None or len(result) == 0):
+            return []
         return Cart.model_validate(result).items
     async def add_product_to_cart(self,body : CartChangeRequest,token : str = get_token()):
         return await self.__change_cart(body.id,token,command='Add')

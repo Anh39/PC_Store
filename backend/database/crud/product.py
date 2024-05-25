@@ -42,7 +42,7 @@ class ProductCRUD(BaseCRUD):
     async def full_get(
             self,
             id : int | None = None,
-            mode : str = Literal['random','-'],
+            mode : str = Literal['random','none'],
             offset : int = 0,
             limit : int = 50,
             image_metadata : bool = False
@@ -114,7 +114,8 @@ class ProductCRUD(BaseCRUD):
             mode : str = Literal['random'],
             offset : int = 0,
             limit : int = 50,
-            name : str | None = None
+            name : str | None = None,
+            category : str | None = None,
         ) -> Response:
         with Session(self.engine) as session:
             query = select(ProductSchema)
@@ -122,6 +123,8 @@ class ProductCRUD(BaseCRUD):
                 query = query.where(ProductSchema.id == id)
             if (mode == 'random'):
                 query = query.order_by(func.random())
+            if (category != None):
+                query = query.where(ProductSchema.category == category)
             if (name != None):
                 query = query.where(ProductSchema.name.like(f'%{name}%'))
             query = query.offset(offset).limit(limit)
