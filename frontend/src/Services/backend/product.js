@@ -60,7 +60,6 @@ export const getProductDetail = async (id) => {
         data['basic_infos'] = basic_infos
         data['detail_infos'] = detail_infos
         data['notices'] = notices
-        console.log(data)
         return data;
     } else {
         return null
