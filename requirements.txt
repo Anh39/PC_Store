@@ -1,0 +1,9 @@
+fastapi
+scikit-learn
+aiohttp
+sqlalchemy
+uuid
+playwright
+bs4
+paypalrestsdk
+uvicorn

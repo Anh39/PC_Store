@@ -1,5 +1,4 @@
 from backend.common import common
-import aiohttp
 from .base import BaseDBAPI
 import json
 from ..model import Product

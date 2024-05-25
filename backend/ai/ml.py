@@ -1,10 +1,5 @@
 from backend.server.api.product import ProductDBAPI
 from sklearn.metrics.pairwise import cosine_similarity
-import asyncio
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-import re
-import nltk,copy,time
 from sklearn.feature_extraction.text import TfidfVectorizer
 from .api import DatabaseAPI
 import heapq

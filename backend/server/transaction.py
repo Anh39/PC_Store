@@ -5,7 +5,6 @@ from .validator import UserValidator
 from .cart import CartManager
 from .order import OrderManager
 import paypalrestsdk
-import asyncio
 from backend.common import folder_path,common
 
 paypalrestsdk.configure(folder_path.API.get_paypal_configure())
