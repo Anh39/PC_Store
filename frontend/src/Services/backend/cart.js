@@ -1,4 +1,4 @@
-import { get,post,del} from "./base";
+import { get,post,del, patch} from "./base";
 
 export const getCart = async () => {
     const result = await get(`cart`)
@@ -25,7 +25,7 @@ export const changeCartAmount = async (id,amount) => {
         'id' : id,
         'amount' : amount
     }
-    const result = await post(`cart`,option)
+    const result = await patch(`cart`,option)
     if (result != null) {
         return true
     } else {
