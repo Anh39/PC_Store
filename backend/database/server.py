@@ -5,7 +5,6 @@ from sqlalchemy import Engine,create_engine
 from backend.database.schema.user import BaseSchema
 import uvicorn
 from .crud import *
-import logging
 
 class DatabaseServer:
     def __init__(self) -> None:
