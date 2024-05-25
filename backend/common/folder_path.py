@@ -18,7 +18,9 @@ class API:
         if (cls._data == None):
             cls._read_configure()
         return cls._data['paypal']
-
+class AI:
+    path = join(backend,'ai')
+    model = join(path,'model')
 class Common:
     path = join(backend,'common')
     config = join(path,'config.json')

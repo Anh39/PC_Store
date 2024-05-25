@@ -42,7 +42,7 @@ class ProductCRUD(BaseCRUD):
     async def full_get(
             self,
             id : int | None = None,
-            mode : str = Literal['random'],
+            mode : str = Literal['random','-'],
             offset : int = 0,
             limit : int = 50,
             image_metadata : bool = False
