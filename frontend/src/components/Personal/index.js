@@ -7,7 +7,7 @@ function Personal() {
     const items = [
         {
             key: 'resetpassword',
-            label: <Link to="/resetpassword">Đổi mật khẩu</Link>
+            label: <Link to="/resetpassword ">Đổi mật khẩu</Link>
         },
         {
             key: 'logout',

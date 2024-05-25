@@ -13,11 +13,6 @@ function MenuSider() {
             key: "menu-2",
             label: <Link to="/historyadmin">Danh sách mua hàng</Link>,
             icon: <icons.CheckOutlined />,
-        },
-        {
-            key: "menu-3",
-            label: "Menu 3",
-            icon: <icons.HighlightOutlined />
         }
     ];
     return (

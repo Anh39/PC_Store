@@ -18,6 +18,7 @@ import PC from "../pages/Category/pc";
 import Laptop from "../pages/Category/laptop";
 import Display from "../pages/Category/display";
 import Auxility from "../pages/Category/auxility";
+import ResetPassword from "../pages/ResetPassword";
 
 export const routes = [
     // Public
@@ -72,6 +73,11 @@ export const routes = [
             {
                 path: "/failure",
                 element: <Failure />
+            },
+            {
+                path: "/resetpassword",
+                element: <ResetPassword />
+                // element: <>lamo</>
             },
             {
                 path: "/pc",

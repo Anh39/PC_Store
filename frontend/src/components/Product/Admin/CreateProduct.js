@@ -14,7 +14,7 @@ function CreateProduct(props) {
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleSubmit = async (data) => {
-        console.log(data);
+        data.name = data.name.toUpperCase();
         const product_id = await createProduct(data);
         if (product_id != null) {
             console.log(product_id);
@@ -27,7 +27,7 @@ function CreateProduct(props) {
         } else {
             messageApi.open({
                 type: 'error',
-                content: "Tạo phòng thất bại"
+                content: "Tạo sản phẩm thất bại"
             });
         }
     }
@@ -42,7 +42,6 @@ function CreateProduct(props) {
     useEffect(() => {
         const fetchApi = async () => {
             const result = await getCategoryList();
-            console.log(result);
             setDataCategory(result);
         }
 
