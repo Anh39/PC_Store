@@ -40,15 +40,12 @@ class OrderCRUD(BaseCRUD):
     async def update(
             self,
             data : dict,
-            id : int | None = None,
-            user_id : int | None = None
+            id : int
         ) -> Response: 
         with Session(self.engine) as session:
             query = update(OrderSchema)
             if (id != None):
                 query = query.where(OrderSchema.id == id)
-            if (user_id != None):
-                query = query.where(OrderSchema.user_id == user_id)
             query = query.values(data)
             session.execute(query)
             session.commit()

@@ -26,15 +26,5 @@ class OrderManager:
         }
         result = await self.order_api.create_order(data)
         return result
-    async def add_product_to_cart(self,body : CartChangeRequest,token : str = get_token()):
-        return await self.__change_cart(body.id,token,command='Add')
-    async def change_amount(self,body : CartChangeRequest,token : str = get_token()):
-        return await self.__change_cart(body.id,token,command=body.amount)
-    async def delete_product_in_cart(self,id : int,token : str = get_token()):
-        return await self.__change_cart(id,token,command='Delete')
-    async def __change_cart(self,id : int,token : str,command : str | int): 
-        return await self.order_api.modify_cart(
-            token=token,
-            command=command,
-            id=id
-        )
+    async def change_order(self,id : int,data : dict,token : str = get_token()):
+        return await self.order_api.update_order(id,data)

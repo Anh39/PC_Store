@@ -20,7 +20,7 @@ class UserSchema(BaseSchema):
     card : Mapped[str] = mapped_column(nullable=True)
     
     have_cart = relationship('CartSchema',back_populates='owner')
-    have_orders = relationship('OrderSchema',back_populates='owner')
+    have_orders = relationship('OrderSchema',back_populates='owner',cascade='all, delete-orphan')
 
     _black_list = ['have_cart','have_orders']
     def model_dump(self) -> dict[str, object]:

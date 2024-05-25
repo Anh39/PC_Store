@@ -34,4 +34,20 @@ class OrderDBAPI(BaseDBAPI):
         except Exception as e:
             print(e)
             return False
-    
+    async def update_order(
+        self,
+        id : int,
+        data : dict
+    ) -> bool:
+        try:
+            params = {
+                'id' : id
+            }
+            async with(self.session.patch(url='/order',params=params,data=json.dumps(data),headers=headers)) as response:
+                if (response.status == 200):
+                    return True
+                else:
+                    return False
+        except Exception as e:
+            print(e)
+            return False

@@ -15,21 +15,21 @@ function CreateProduct(props) {
 
     const handleSubmit = async (data) => {
         console.log(data);
-        // const product_id = await createProduct(data);
-        // if (product_id != null) {
-        //     console.log(product_id);
-        //     form.resetFields();
-        //     messageApi.open({
-        //         type: 'success',
-        //         content: "Tạo mới sản phẩm thành công"
-        //     });
-        //     onReload();
-        // } else {
-        //     messageApi.open({
-        //         type: 'error',
-        //         content: "Tạo phòng thất bại"
-        //     });
-        // }
+        const product_id = await createProduct(data);
+        if (product_id != null) {
+            console.log(product_id);
+            form.resetFields();
+            messageApi.open({
+                type: 'success',
+                content: "Tạo mới sản phẩm thành công"
+            });
+            onReload();
+        } else {
+            messageApi.open({
+                type: 'error',
+                content: "Tạo phòng thất bại"
+            });
+        }
     }
 
     const rules = [
