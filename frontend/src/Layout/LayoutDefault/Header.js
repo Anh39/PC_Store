@@ -3,7 +3,7 @@ import { UnorderedListOutlined, LaptopOutlined, RightOutlined } from "@ant-desig
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CartMini from "../../components/CartMini";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getCategoryList } from "../../Services/backend/product";
 import Personal from "../../components/Personal";
 import logoElink from "../../images/logo-elink.png";
@@ -15,28 +15,8 @@ function Header(props) {
     const isLogin = useSelector(state => state.loginReducer);
     console.log(isLogin);
     const navigate = useNavigate();
-    const items = [
-        {
-            key: "0",
-            label: <div className="dropdown__item">
-                <div className="dropdown__item--right">
-                    <div className="dropdown__item--icon"><LaptopOutlined /></div>
-                    <div className="dropdown__item--content">Laptop, Macbook, Surface</div>
-                </div>
-                <div className="dropdown__item--right dropdown__item--icon"><RightOutlined /></div>
-            </div>
-        },
-        {
-            key: "1",
-            label: <div className="dropdown__item">
-                <div className="dropdown__item--right">
-                    <div className="dropdown__item--icon"><LaptopOutlined /></div>
-                    <div className="dropdown__item--content">Laptop, Macbook, Surface</div>
-                </div>
-                <div className="dropdown__item--right dropdown__item--icon"><RightOutlined /></div>
-            </div>
-        }
-    ];
+    const [items, setItems] = useState([]);
+
 
     const handleFinish = (values) => {
         console.log(values);
@@ -46,8 +26,16 @@ function Header(props) {
     useEffect(() => {
         const fetchAPI = async () => {
             const data = await getCategoryList();
-            console.log(data);
-        }
+            setItems(data.map((item, index) => ({
+                key: index.toString(),
+                label: (
+                    <div className="dropdown__item">
+                        <div className="dropdown__item--icon"><LaptopOutlined /></div>
+                        <div className="dropdown__item--content"><Link to={`/${item}`}>{item}</Link></div>
+                    </div>
+                )
+            })));
+        };
 
         fetchAPI();
     }, []);

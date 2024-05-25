@@ -53,7 +53,7 @@ function ProductDetail() {
                                 })}
                             />
                         </div>
-                        <div style={{ margin: 20 }}>
+                        <div style={{ marginLeft: 200 }}>
                             <ul>
                                 <h4>Thông tin cơ bản</h4>
                                 {product.basic_infos.map((item, index) => (
@@ -67,11 +67,6 @@ function ProductDetail() {
 
                             <Button type="primary" >Mua ngay</Button>
                             <Button onClick={handleAddToCart}>Thêm vào giỏ hàng</Button>
-                        </div>
-                        <div>
-                            {product.detail_infos.map((item, index) => (
-                                <li key={index}>{item}</li>
-                            ))}
                         </div>
                     </Flex>
 

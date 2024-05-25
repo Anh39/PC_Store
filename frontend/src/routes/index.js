@@ -14,6 +14,10 @@ import History from "../pages/History";
 import HistoryAdmin from "../pages/HistoryAdmin";
 import Success from "../pages/ReturnPayment/success";
 import Failure from "../pages/ReturnPayment/failure";
+import PC from "../pages/Category/pc";
+import Laptop from "../pages/Category/laptop";
+import Display from "../pages/Category/display";
+import Auxility from "../pages/Category/auxility";
 
 export const routes = [
     // Public
@@ -68,7 +72,23 @@ export const routes = [
             {
                 path: "/failure",
                 element: <Failure />
-            }
+            },
+            {
+                path: "/pc",
+                element: <PC />
+            },
+            {
+                path: "/laptop",
+                element: <Laptop />
+            },
+            {
+                path: "/display",
+                element: <Display />
+            },
+            {
+                path: "/auxility",
+                element: <Auxility />
+            },
         ]
     },
     {

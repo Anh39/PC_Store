@@ -66,6 +66,16 @@ export const getProductDetail = async (id) => {
         return null
     }
 }
+
+export const getCategoryProduct = async (option) => {
+    const result = await get(`product?category=${option}`)
+    if (result != null) {
+        const data = await result.json();
+        return data;
+    } else {
+        return []
+    }
+}
 export const createProduct = async (option) => {
     // const basic = [
     //     'time_created','time_modified','price','name','ratings'
