@@ -14,21 +14,22 @@ function CreateProduct(props) {
     const [messageApi, contextHolder] = message.useMessage();
 
     const handleSubmit = async (data) => {
-        const product_id = await createProduct(data);
-        if (product_id != null) {
-            console.log(product_id);
-            form.resetFields();
-            messageApi.open({
-                type: 'success',
-                content: "Tạo mới sản phẩm thành công"
-            });
-            onReload();
-        } else {
-            messageApi.open({
-                type: 'error',
-                content: "Tạo phòng thất bại"
-            });
-        }
+        console.log(data);
+        // const product_id = await createProduct(data);
+        // if (product_id != null) {
+        //     console.log(product_id);
+        //     form.resetFields();
+        //     messageApi.open({
+        //         type: 'success',
+        //         content: "Tạo mới sản phẩm thành công"
+        //     });
+        //     onReload();
+        // } else {
+        //     messageApi.open({
+        //         type: 'error',
+        //         content: "Tạo phòng thất bại"
+        //     });
+        // }
     }
 
     const rules = [
@@ -109,15 +110,13 @@ function CreateProduct(props) {
                         </Select>
                     </Form.Item>
 
-                    <Form.List name="images" label="Link hình ảnh">
+                    <Form.List name="images" preserve={false} label="Link hình ảnh">
                         {(fields, { add, remove }) => (
                             <>
                                 {fields.map((value, index) => (
                                     <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                        <Form.Item name={`${index}.key`}>
-                                        </Form.Item>
                                         <Form.Item
-                                            name={`${index}.value`}
+                                            name={`${index}`}
                                             label={index === 0 ? 'Hình ảnh' : ''}
                                         >
                                             <Input style={{ width: 450 }} placeholder="url" />
@@ -134,15 +133,13 @@ function CreateProduct(props) {
                         )}
                     </Form.List>
 
-                    <Form.List name="basic_infos">
+                    <Form.List name="basic_infos" preserve={false}>
                         {(fields, { add, remove }) => (
                             <>
                                 {fields.map((value, index) => (
                                     <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                        <Form.Item name={`${index}.key`}>
-                                        </Form.Item>
                                         <Form.Item
-                                            name={`${index}.value`}
+                                            name={`${index}`}
                                             label={index === 0 ? 'Thông tin' : ''}
                                         >
                                             <Input style={{ width: 450 }} placeholder="Information" />

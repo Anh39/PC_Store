@@ -33,7 +33,6 @@ function EditProduct(props) {
             setProduct(productDetail);
         }
         fetchApi();
-        console.log(product);
     }, []);
 
     const customStyles = {
@@ -57,23 +56,24 @@ function EditProduct(props) {
     }
 
     const handleSubmit = async (e) => {
-        setSpinning(true);
-        const result = await editProduct(item.id, e);
-        setTimeout(() => {
-            if (result) {
-                form.resetFields();
-                api.success({
-                    message: "Cập nhật sản phẩm thành công"
-                });
-                setShowModal(false);
-                onReload();
-            } else {
-                api.error({
-                    message: "Cập nhật sản phẩm thất bại"
-                });
-            }
-            setSpinning(false);
-        }, 100);
+        console.log(e);
+        // setSpinning(true);
+        // const result = await editProduct(item.id, e);
+        // setTimeout(() => {
+        //     if (result) {
+        //         form.resetFields();
+        //         api.success({
+        //             message: "Cập nhật sản phẩm thành công"
+        //         });
+        //         setShowModal(false);
+        //         onReload();
+        //     } else {
+        //         api.error({
+        //             message: "Cập nhật sản phẩm thất bại"
+        //         });
+        //     }
+        //     setSpinning(false);
+        // }, 100);
     }
 
     return (
@@ -111,13 +111,13 @@ function EditProduct(props) {
                             <InputNumber min={1} defaultValue={product.price} />
                         </Form.Item>
 
-                        <Form.List name="images">
+                        <Form.List name="images" preserve={false}>
                             {(fields, { add, remove }) => (
                                 <>
                                     {fields.map((value, index) => (
                                         <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                                             <Form.Item
-                                                name={`images[${index}]`}
+                                                name={`${index}`}
                                                 label={index === 0 ? 'Hình ảnh' : ''}
                                             >
                                                 <Input style={{ width: 450 }} placeholder="url" defaultValue={product.images[index]} />
@@ -148,7 +148,7 @@ function EditProduct(props) {
                                     {fields.map((value, index) => (
                                         <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                                             <Form.Item
-                                                name={`basic_infos[${index}]`}
+                                                name={`${index}`}
                                                 label={index === 0 ? 'Thông tin' : ''}
                                             >
                                                 <Input style={{ width: 450 }} placeholder="Information" defaultValue={product.basic_infos[index]} />
