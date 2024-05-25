@@ -1,5 +1,4 @@
 from backend.common import common
-import aiohttp
 from .base import BaseDBAPI
 import json
 from ..model import User
@@ -35,42 +34,4 @@ class OrderDBAPI(BaseDBAPI):
         except Exception as e:
             print(e)
             return False
-    async def update_user(
-        self,
-        token : str,
-        password : str,
-        data : dict[str,object]
-    ) -> bool:
-        try:
-            params = {
-                'token' : token,
-                'password' : password
-            }
-            async with(self.session.patch(url='/user',params = params,data=json.dumps(data),headers=headers)) as response:
-                if (response.status == 200):
-                    return True
-                else:
-                    return False
-        except Exception as e:
-            print(e)
-            return False
-    async def delete_user(
-        self,
-        token : str,
-        password : str
-    ) -> bool:
-        try:
-            params = {
-                'token' : token,
-                'password' : password
-            }
-            async with(self.session.delete(url='/user',params = params,headers=headers)) as response:
-                if (response.status == 200):
-                    return True
-                else:
-                    return False
-        except Exception as e:
-            print(e)
-            return False
-
     

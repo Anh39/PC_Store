@@ -17,7 +17,7 @@ export const getProductList = async (id) => {
     }
 }
 export const getProductDetail = async (id) => { 
-    const result = await get(`product_detail/?id=${id}`)
+    const result = await get(`product_detail?id=${id}`)
     if (result != null) {
         let data = await result.json();
         data = data[0];

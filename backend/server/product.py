@@ -2,12 +2,15 @@ from .model import *
 from fastapi import HTTPException,Header
 from .validator import UserValidator
 from .api.product import ProductDBAPI
+from .api.ai import AIAPI
 from typing import Literal
 
 get_token = Header
 class ProductManager:
     def __init__(self,validator : UserValidator) -> None:
         self.product_api : ProductDBAPI = ProductDBAPI()
+        self.ai_api : AIAPI = AIAPI()
+        self.ai_api.start()
         self.product_api.start()
         self.validator = validator
         self.category_cache = None
@@ -62,8 +65,17 @@ class ProductManager:
             if (result):
                 return result
         return False
-    async def recommend_products(self,id : int | None = None,limit : int = 10,token : str = get_token(None)) -> list:
-        return await self.get_product(token=token,limit=limit)
+    async def recommend_products(self,id : int,limit : int = 8,token : str = get_token(None)) -> list:
+        results = await self.ai_api.product_based_recommend(
+            id=id,
+            amount=limit
+        )
+        product_results = []
+        for result in results:
+            product_result = await self.product_api.get_product({'id' : result[0]})
+            product_result = product_result[0]
+            product_results.append(product_result)
+        return product_results
     async def change_product(self,data : dict) -> Product:
         return Product.get_test()
     async def delete_product(self,data : dict) -> bool:
