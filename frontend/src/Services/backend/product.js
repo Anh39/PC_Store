@@ -16,6 +16,22 @@ export const getProductList = async (id) => {
         return []
     }
 }
+export const searchProductList = async (name) => {
+    const result = await get(`product?name=${name}`)
+    if (result != null) {
+        const data = await result.json();
+        // for(let i=0;i<data.length;i++) {
+        //     try {
+        //         data[i]['thumbnail'] = data[i]['image_0']
+        //     } catch {
+        //         console.log(i)
+        //     }
+        // }
+        return data;
+    } else {
+        return []
+    }
+}
 export const getProductDetail = async (id) => { 
     const result = await get(`product_detail?id=${id}`)
     if (result != null) {
@@ -57,6 +73,8 @@ export const getProductDetail = async (id) => {
             }
             i++
         }
+        data['images'].reverse()
+        data['images'] = data['images'].slice(0,6)
         data['basic_infos'] = basic_infos
         data['detail_infos'] = detail_infos
         data['notices'] = notices

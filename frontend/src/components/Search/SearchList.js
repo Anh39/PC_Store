@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { getProductList } from "../../Services/productService";
+import { searchProductList } from "../../Services/backend/product";
 import { Col, Row } from "antd";
 import ProductItem from "../Product/User/ProductItem";
 
@@ -11,7 +11,8 @@ function SearchList(props) {
     useEffect(() => {
         const fetchAPI = async () => {
             onReload();
-            const product = await getProductList();
+            let name = 'pc'
+            const product = await searchProductList(name);
 
             const newData = data.map((item) => {
                 const newItem = product.find((p) => p.id === item.id && p);
