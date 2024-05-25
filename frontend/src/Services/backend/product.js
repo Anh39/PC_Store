@@ -122,3 +122,13 @@ export const getCategoryList = async () => {
         return []
     }
 }
+
+export const getSearch = async (keyword) => {
+    const result = await get(`product/?name=${keyword}`);
+    if (result != null) {
+        const data = await result.json();
+        return data;
+    } else {
+        return [];
+    }
+}
