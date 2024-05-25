@@ -2,6 +2,7 @@ from fastapi import HTTPException,Response,Header
 from fastapi.responses import JSONResponse
 from .validator import UserValidator
 from .cart import CartManager
+from .order import OrderManager
 import paypalrestsdk
 import asyncio
 from backend.common import folder_path
@@ -9,11 +10,12 @@ from backend.common import folder_path
 paypalrestsdk.configure(folder_path.API.get_paypal_configure())
 get_token = Header
 class TransactionManager:
-    def __init__(self,validator : UserValidator,cart_manager : CartManager) -> None:
+    def __init__(self,validator : UserValidator,cart_manager : CartManager,order_manager : OrderManager) -> None:
         self.client = paypalrestsdk
         self.validator = validator
         self.payment_queue : dict[str] = {}
         self.cart_manager : CartManager = cart_manager
+        self.order_manager : OrderManager = order_manager
     def convert(self,vnd : str) -> str:
         return str(float(vnd)/25000)
     async def payment_return(self,
@@ -26,6 +28,7 @@ class TransactionManager:
         else:
             value = self.payment_queue.pop(paymentId)
             await self.excute_payment(paymentId,PayerID)
+            await self.order_manager.create_order(token=value)
             await self.cart_manager.delete_product_in_cart(id=-1,token=value)
             return Response(status_code=200,content='Payment success, please return to store')
     async def create_payment(self,token : str = get_token(None)):

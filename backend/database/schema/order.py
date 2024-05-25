@@ -8,10 +8,9 @@ class OrderSchema(BaseSchema):
     __tablename__ = 'order'
     id : Mapped[int] = mapped_column(autoincrement=True,primary_key=True)
     time_created : Mapped[datetime] = mapped_column(nullable=False)
-    time_completed : Mapped[datetime]
-    value : Mapped[float]
-    address : Mapped[str]
-    phone : Mapped[str]
+    time_completed : Mapped[datetime] = mapped_column(nullable=True)
+    address : Mapped[str] = mapped_column(nullable=True)
+    phone : Mapped[str] = mapped_column(nullable=True)
     status : Mapped[str]
     
     user_id = Column(Integer,ForeignKey('user.id'))

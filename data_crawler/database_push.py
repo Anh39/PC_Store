@@ -59,6 +59,9 @@ class PushAPI:
         for key in basic:
             result[key] = data[key]
         result['thumbnail'] = images[0]['path']
+        for key in data:
+            if (key not in basic and key not in ['thumbnail','info','detail_info','notices']):
+                result[key] = data[key]
         return result
 
 async def process():

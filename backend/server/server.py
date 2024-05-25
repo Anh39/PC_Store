@@ -25,7 +25,7 @@ class FastAPIServer:
         self.media = MediaManager(self.validator)
         self.cart = CartManager(self.validator)
         self.order = OrderManager(self.validator)
-        self.transaction = TransactionManager(self.validator,self.cart)
+        self.transaction = TransactionManager(self.validator,self.cart,self.order)
         
         self.app.add_middleware(
             CORSMiddleware,
@@ -41,7 +41,7 @@ class FastAPIServer:
     def _add_route(self):
         self.app.add_api_route('/login',self.user.login,methods=['POST'],tags=['User'])
         self.app.add_api_route('/register',self.user.register,methods=['POST'],tags=['User'])
-        self.app.add_api_route('/reset_password',self.user.reset_password,methods=['POST'],tags=['User'])
+        self.app.add_api_route('/reset_password',self.user.reset_password,methods=['PATCH'],tags=['User'])
         self.app.add_api_route('/user',self.user.change_user_info,methods=['PATCH'],tags=['User'])
         self.app.add_api_route('/user',self.user.get_user_info,methods=['GET'],tags=['User'])
         self.app.add_api_route('/user',self.user.delete_user,methods=['DELETE'],tags=['User'])
@@ -51,6 +51,7 @@ class FastAPIServer:
         self.app.add_api_route('/cart',self.cart.change_amount,methods=['PATCH'],tags=['Cart'])
         self.app.add_api_route('/cart',self.cart.delete_product_in_cart,methods=['DELETE'],tags=['Cart'])
         self.app.add_api_route('/orders',self.order.get_orders,methods=['GET'],tags=['Order'])
+        self.app.add_api_route('/order',self.order.create_order,methods=['POST'],tags=['DEBUG'])
         
         self.app.add_api_route('/image',self.media.upload_image,methods=['POST'],tags=['Media'])
         self.app.add_api_route('/image',self.media.delete_image,methods=['DELETE'],tags=['Media'])
