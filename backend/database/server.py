@@ -38,6 +38,8 @@ class DatabaseServer:
         
         self.app.add_api_route('/product/full',self.cruds['product'].full_create,methods=['POST'],tags=['product'])
         self.app.add_api_route('/product/full',self.cruds['product'].full_get,methods=['GET'],tags=['product'])
+        self.app.add_api_route('/product/full',self.cruds['product'].full_update,methods=['PATCH'],tags=['product'])
+
 
         self.app.add_api_route('/cart_item',self.cruds['cart'].modify_item,methods=['POST'],tags=['cart'])
     def start(self):

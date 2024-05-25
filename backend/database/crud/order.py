@@ -79,7 +79,10 @@ class OrderCRUD(BaseCRUD):
             user = session.query(UserSchema).filter(UserSchema.token == token).first()
             if (user == None):
                 return Response(status_code=404)
-            query = query.where(OrderSchema.user_id == user.id).order_by(OrderSchema.time_created)
+            if user.role != 'Admin':
+                query = query.where(OrderSchema.user_id == user.id).order_by(OrderSchema.time_created)
+            else:
+                query = query.order_by(OrderSchema.time_created)
             results = session.execute(query)
             response_results = []
             for result in results:

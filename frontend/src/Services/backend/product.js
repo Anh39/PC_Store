@@ -1,7 +1,32 @@
-import { get,post} from "./base";
+import { del, get,patch,post} from "./base";
 
 export const getProductList = async (id) => {
     const result = await get(`product?limit=100`)
+    if (result != null) {
+        const data = await result.json();
+        // for(let i=0;i<data.length;i++) {
+        //     try {
+        //         data[i]['thumbnail'] = data[i]['image_0']
+        //     } catch {
+        //         console.log(i)
+        //     }
+        // }
+        return data;
+    } else {
+        return []
+    }
+}
+export const deleteProduct = async (id) => {
+    const result = await del(`product?id=${id}`)
+    if (result != null) {
+        const data = await result.json();
+        return data;
+    } else {
+        return []
+    }
+}
+export const searchProductList = async (name) => {
+    const result = await get(`product?name=${name}`)
     if (result != null) {
         const data = await result.json();
         // for(let i=0;i<data.length;i++) {
@@ -57,6 +82,8 @@ export const getProductDetail = async (id) => {
             }
             i++
         }
+        data['images'].reverse()
+        data['images'] = data['images'].slice(0,6)
         data['basic_infos'] = basic_infos
         data['detail_infos'] = detail_infos
         data['notices'] = notices
@@ -76,26 +103,6 @@ export const getCategoryProduct = async (option) => {
     }
 }
 export const createProduct = async (option) => {
-    // const basic = [
-    //     'time_created','time_modified','price','name','ratings'
-    // ]
-    // const infos = {}
-    // for (let key in option){
-    //     if (!basic.includes(key)) {
-    //         console.log(key);
-    //         infos[key] = option[key];
-    //     }
-    // }
-    // const data = {}
-    // for (let it in basic) {
-    //     if (basic[it] in option) {
-    //         data[basic[it]] = option[basic[it]];
-    //     }
-    // }
-    // data['infos'] = {};
-    // for (let info in infos) {
-    //     data['infos'][info] = infos[info];
-    // }
     let data = option
     data['images'] = [
         {
@@ -103,7 +110,43 @@ export const createProduct = async (option) => {
             'order' : 0
         }
     ]
+    for (let i=0;i<option.basic_infos.length;i++) {
+        option[`basic_info_${i}`] = option.basic_infos[i]
+    }
+    delete option.basic_infos
+    for (let i=0;i<option.images.length;i++) {
+        option.images[i] = {
+            'path' : option.images[i],
+            'order' : i
+        }
+    }
+
     const result = await post('product',data)
+    if (result != null) {
+       const id = await result.text()
+       return id
+    } else {
+        return null
+    }
+}
+
+export const updateProduct = async (id,option) => {
+    let data = option
+
+    for (let i=0;i<option.images.length;i++) {
+        option.images[i] = {
+            'path' : option.images[i],
+            'order' : i
+        }
+    }
+    for (let i=0;i<option.basic_infos.length;i++) {
+        option[`basic_info_${i}`] = option.basic_infos[i]
+    }
+    data['thumbnail'] = data.images[0].path
+    data['name'] = 'abc'
+    delete option.basic_infos
+
+    const result = await patch(`product?id=${id}`,data)
     if (result != null) {
        const id = await result.text()
        return id

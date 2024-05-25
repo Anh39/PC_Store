@@ -13,7 +13,7 @@ function History() {
         fetchAPI();
     }, []);
 
-    console.log(data.items);
+    // console.log(data.items);
 
     const columns = [
         {

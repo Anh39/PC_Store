@@ -84,6 +84,50 @@ class ProductCRUD(BaseCRUD):
             session.add(product)
             session.commit()
             return Response(status_code=200)
+    async def full_update(
+            self,
+            data : dict,
+            id : int | None = None
+        ) -> Response: 
+        with Session(self.engine) as session:
+            query = update(ProductSchema)
+            if (id != None):
+                query = query.where(ProductSchema.id == id)
+            query = query.values(data)
+        with Session(self.engine) as session:
+            old_product = session.query(ProductSchema).filter(ProductSchema.id == id).first()
+            session.delete(old_product)
+            session.commit()
+            data.update({'id' : id})
+            product = ProductSchema.model_validate(data)
+            session.add(product)
+            try:
+                session.commit()
+                session.refresh(product)
+                images = data.get('images',[])
+                for image in images:
+                    new_image = ProductImageSchema()
+                    new_image.path = image['path']
+                    new_image.order = image['order']
+                    new_image.product_id = product.id
+                    session.add(new_image)
+                basic_keys = ['images']
+                extra_keys = []
+                for key in ProductSchema.__table__.columns:
+                    basic_keys.append(str(key.name))
+                for key in data:
+                    if (key not in basic_keys):
+                        extra_keys.append(key)
+                for key in extra_keys:
+                    new_info = MapSchema()
+                    new_info.key = key
+                    new_info.value = data[key]
+                    new_info.product_id = product.id
+                    session.add(new_info)
+                session.commit()
+                return Response(status_code=200)
+            except:
+                return Response(status_code=404)
     async def update(
             self,
             data : dict,
@@ -106,6 +150,15 @@ class ProductCRUD(BaseCRUD):
             if (id != None):
                 query = query.where(ProductSchema.id == id)
             session.execute(query)
+            session.commit()
+            return Response(status_code=200)
+    async def delete(
+            self,
+            id : int
+        ) -> Response: 
+        with Session(self.engine) as session:
+            product = session.query(ProductSchema).filter(ProductSchema.id == id).first()
+            session.delete(product)
             session.commit()
             return Response(status_code=200)
     async def get(
