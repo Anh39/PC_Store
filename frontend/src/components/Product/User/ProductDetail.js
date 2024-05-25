@@ -4,6 +4,7 @@ import { getProductDetail } from "../../../Services/backend/product";
 import { Button, Flex, Tabs } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../actions/cart";
+import ProductRecommend from "./ProductRecommend";
 
 function ProductDetail() {
 
@@ -76,9 +77,7 @@ function ProductDetail() {
 
                     <div style={{ margin: 20 }}>
                         <h2>Giới thiệu</h2>
-                        <p>
-                            { }
-                        </p>
+                        <ProductRecommend id={params.id}/>
                     </div>
                 </>
             )}

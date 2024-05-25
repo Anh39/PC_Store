@@ -1,4 +1,4 @@
-import { get,post,del, patch} from "./base";
+import { get, post, del, patch } from "./base";
 
 export const getCart = async () => {
     const result = await get(`cart`)
@@ -9,30 +9,30 @@ export const getCart = async () => {
         return null;
     }
 }
-export const addProductToCart = async (id) => { 
+export const addProductToCart = async (id) => {
     let option = {
-        'id' : id
+        'id': id
     }
-    const result = await post(`cart`,option)
+    const result = await post(`cart`, option)
     if (result != null) {
         return true
     } else {
         return false
     }
 }
-export const changeCartAmount = async (id,amount) => { 
+export const changeCartAmount = async (id, amount) => {
     let option = {
-        'id' : id,
-        'amount' : amount
+        'id': id,
+        'amount': amount
     }
-    const result = await patch(`cart`,option)
+    const result = await patch(`cart`, option)
     if (result != null) {
         return true
     } else {
         return false
     }
 }
-export const deleteCartProduct = async (id) => { 
+export const deleteCartProduct = async (id) => {
     const result = await del(`cart/?id=${id}`)
     if (result != null) {
         return true
@@ -41,7 +41,7 @@ export const deleteCartProduct = async (id) => {
     }
 }
 
-export const deleteCartAll = async () => { 
+export const deleteCartAll = async () => {
     const result = await del(`cart/?id=${-1}`)
     if (result != null) {
         return true

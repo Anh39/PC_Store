@@ -30,19 +30,20 @@ function Cart() {
         if (response) {
             setReload(!reload);
             fetchAPI();
-        } else {
-
+            setCart([]);
         }
+        setReload(!reload);
     }
 
     const [cart, setCart] = useState();
 
     useEffect(() => {
         fetchAPI();
-    }, [total]);
+    }, [reload]);
 
     const handleReload = () => {
         fetchAPI();
+        setReload(!reload);
     }
 
     const Payment = async () => {

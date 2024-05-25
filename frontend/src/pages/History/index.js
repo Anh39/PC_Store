@@ -8,12 +8,12 @@ function History() {
     useEffect(() => {
         const fetchAPI = async () => {
             const result = await getHistory();
-            setData(result);
+            setData(...result);
         }
         fetchAPI();
     }, []);
 
-    console.log(data[0].items);
+    console.log(data.items);
 
     const columns = [
         {
@@ -45,7 +45,7 @@ function History() {
     ]
     return (
         <>
-            <Table dataSource={data && (data[0].items)} columns={columns}/>
+            <Table dataSource={data && (data.items)} columns={columns}/>
         </>
     )
 }

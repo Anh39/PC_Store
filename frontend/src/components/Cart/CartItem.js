@@ -19,14 +19,10 @@ function CartItem(props) {
     const handleDelete = async () => {
         dispatch(deleteItem(item.id));
         const response = await deleteCartProduct(item.id);
-        console.log(response);
-        onReload();
+        if (response) {
+            onReload();
+        }
     }
-
-    useEffect(() => {
-        onReload();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cartRedux]);
 
     return (
         <>

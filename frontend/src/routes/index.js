@@ -12,6 +12,8 @@ import LayoutAdmin from "../Layout/LayoutAdmin";
 import Dashboard from "../pages/Dashboard";
 import History from "../pages/History";
 import HistoryAdmin from "../pages/HistoryAdmin";
+import Success from "../pages/ReturnPayment/success";
+import Failure from "../pages/ReturnPayment/failure";
 
 export const routes = [
     // Public
@@ -58,6 +60,14 @@ export const routes = [
             {
                 path: "/history",
                 element: <History />
+            },
+            {
+                path: "/success",
+                element: <Success />
+            },
+            {
+                path: "/failure",
+                element: <Failure />
             }
         ]
     },
