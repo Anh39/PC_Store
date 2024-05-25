@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { Button, Form, Input, InputNumber, Modal, Select, Spin, notification } from "antd";
+import { Button, Form, Input, InputNumber, Modal, Select, Space, Spin, notification } from "antd";
 import { editProduct } from "../../../Services/productService";
 import { EditOutlined } from "@ant-design/icons";
-import { getCategoryList } from "../../../Services/backend/product";
+import { getCategoryList, getProductDetail } from "../../../Services/backend/product";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -12,9 +13,10 @@ function EditProduct(props) {
     const [form] = Form.useForm();
     const [showModal, setShowModal] = useState(false);
     const [api, contextHolder] = notification.useNotification();
-    const [data, setData] = useState(item);
     const [dataCategory, setDataCategory] = useState([]);
     const [spinning, setSpinning] = useState(false);
+
+    const [product, setProduct] = useState();
 
     const rules = [
         {
@@ -26,10 +28,12 @@ function EditProduct(props) {
     useEffect(() => {
         const fetchApi = async () => {
             const category = await getCategoryList();
+            const productDetail = await getProductDetail(item.id);
             setDataCategory(category);
+            setProduct(productDetail);
         }
-
         fetchApi();
+        console.log(product);
     }, []);
 
     const customStyles = {
@@ -49,13 +53,15 @@ function EditProduct(props) {
 
     const closeModal = () => {
         setShowModal(false);
+        form.resetFields(); 
     }
 
     const handleSubmit = async (e) => {
         setSpinning(true);
-        const result = await editProduct(item.id, data);
+        const result = await editProduct(item.id, e);
         setTimeout(() => {
             if (result) {
+                form.resetFields();
                 api.success({
                     message: "Cập nhật sản phẩm thành công"
                 });
@@ -63,12 +69,13 @@ function EditProduct(props) {
                 onReload();
             } else {
                 api.error({
-                    message: "Cập nhật phòng thất bại"
+                    message: "Cập nhật sản phẩm thất bại"
                 });
             }
             setSpinning(false);
-        }, 3000);
+        }, 100);
     }
+
     return (
         <>
             {contextHolder}
@@ -83,54 +90,85 @@ function EditProduct(props) {
                 footer={null}
             >
                 <Spin spinning={spinning} tip="Đang cập nhật">
-                    <Form
+                    {product && (<Form
                         layout="vertical"
                         name="update-room"
                         onFinish={handleSubmit}
                         form={form}
-                        initialValues={data}
+                        initialValues={product}
                     >
                         <Form.Item
                             name="title"
                             label="Tiêu đề"
                         >
-                            <Input defaultValue={data.name} />
+                            <Input defaultValue={product.name} />
                         </Form.Item>
 
                         <Form.Item
                             name="price"
                             label="Giá"
-                            rules={rules}
                         >
-                            <InputNumber min={1} defaultValue={data.price} />
+                            <InputNumber min={1} defaultValue={product.price} />
                         </Form.Item>
 
-                        <Form.Item
-                            name="thumbnail"
-                            label="Đương dẫn ảnh"
-                        >
-                            <Input defaultValue={data.thumbnail} />
-                        </Form.Item>
+                        <Form.List name="images">
+                            {(fields, { add, remove }) => (
+                                <>
+                                    {fields.map((value, index) => (
+                                        <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                            <Form.Item
+                                                name={`images[${index}]`}
+                                                label={index === 0 ? 'Hình ảnh' : ''}
+                                            >
+                                                <Input style={{ width: 450 }} placeholder="url" defaultValue={product.images[index]} />
+                                            </Form.Item>
+                                            <MinusCircleOutlined onClick={() => remove(index)} />
+                                        </Space>
+                                    ))}
+                                    <Form.Item>
+                                        <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                            Thêm
+                                        </Button>
+                                    </Form.Item>
+                                </>
+                            )}
+                        </Form.List>
 
                         <Form.Item name="category" label="Danh mục">
-                            <Select defaultValue={data.category}>
+                            <Select defaultValue={product.category}>
                                 {dataCategory.map((item, index) => (
                                     <Option key={index}>{item}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
 
-                        <Form.Item
-                            name="basic_infos"
-                            label="Thông tin"
-                        >
-                            <Input.TextArea showCount maxLength={10000} />
-                        </Form.Item>
+                        <Form.List name="basic_infos">
+                            {(fields, { add, remove }) => (
+                                <>
+                                    {fields.map((value, index) => (
+                                        <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                            <Form.Item
+                                                name={`basic_infos[${index}]`}
+                                                label={index === 0 ? 'Thông tin' : ''}
+                                            >
+                                                <Input style={{ width: 450 }} placeholder="Information" defaultValue={product.basic_infos[index]} />
+                                            </Form.Item>
+                                            <MinusCircleOutlined onClick={() => remove(index)} />
+                                        </Space>
+                                    ))}
+                                    <Form.Item>
+                                        <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                            Thêm
+                                        </Button>
+                                    </Form.Item>
+                                </>
+                            )}
+                        </Form.List>
 
                         <Form.Item>
                             <Button type="primary" htmlType="Submit" >Cập nhật</Button>
                         </Form.Item>
-                    </Form>
+                    </Form>)}
                 </Spin>
             </Modal>
         </>
