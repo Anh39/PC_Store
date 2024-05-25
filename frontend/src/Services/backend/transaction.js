@@ -10,3 +10,13 @@ export const createTransaction = async () => {
         return []
     }
 }
+
+export const getHistory = async () => {
+    const result = await get(`orders`)
+    if (result != null) {
+        const data = await result.json();
+        return data;
+    } else {
+        return []
+    }
+}

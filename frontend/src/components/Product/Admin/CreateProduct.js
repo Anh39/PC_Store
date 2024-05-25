@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd";
+import { Button, Form, Input, InputNumber, Modal, Select, Space, message } from "antd";
 import { getCategoryList } from "../../../Services/backend/product";
 import { createProduct } from "../../../Services/backend/product";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -107,24 +108,62 @@ function CreateProduct(props) {
                             ))}
                         </Select>
                     </Form.Item>
-                    
-                    <Form.Item
-                        name="thumbnail"
-                        label="Đường dẫn ảnh"
-                    >
-                        <Input.TextArea showCount maxLength={10000} />
-                    </Form.Item>
-                    <Form.Item
-                        name="description"
-                        label="Mô tả"
-                    >
-                        <Input.TextArea showCount maxLength={10000} />
-                    </Form.Item>
+
+                    <Form.List name="images" label="Link hình ảnh">
+                        {(fields, { add, remove }) => (
+                            <>
+                                {fields.map((value, index) => (
+                                    <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                        <Form.Item name={`${index}.key`}>
+                                        </Form.Item>
+                                        <Form.Item
+                                            name={`${index}.value`}
+                                            label={index === 0 ? 'Hình ảnh' : ''}
+                                        >
+                                            <Input style={{ width: 450 }} placeholder="url" />
+                                        </Form.Item>
+                                        <MinusCircleOutlined onClick={() => remove(index)} />
+                                    </Space>
+                                ))}
+                                <Form.Item>
+                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                        Thêm
+                                    </Button>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
+
+                    <Form.List name="basic_infos">
+                        {(fields, { add, remove }) => (
+                            <>
+                                {fields.map((value, index) => (
+                                    <Space style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                        <Form.Item name={`${index}.key`}>
+                                        </Form.Item>
+                                        <Form.Item
+                                            name={`${index}.value`}
+                                            label={index === 0 ? 'Thông tin' : ''}
+                                        >
+                                            <Input style={{ width: 450 }} placeholder="Information" />
+                                        </Form.Item>
+                                        <MinusCircleOutlined onClick={() => remove(index)} />
+                                    </Space>
+                                ))}
+                                <Form.Item>
+                                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                        Thêm
+                                    </Button>
+                                </Form.Item>
+                            </>
+                        )}
+                    </Form.List>
+
                     <Form.Item>
                         <Button type="primary" htmlType="Submit" >Tạo mới</Button>
                     </Form.Item>
                 </Form>
-                
+
             </Modal>
         </>
     )

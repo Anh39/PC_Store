@@ -23,7 +23,7 @@ class ProductManager:
             self.category_cache = list(result)
             return self.category_cache
         else:
-            return []
+            raise HTTPException(401)
     async def create_product(self,data : Product,admin_token : str = get_token(None)) -> None | int:
         valid = await self.validator.admin_validate(admin_token)
         if (valid):
