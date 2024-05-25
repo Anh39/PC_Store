@@ -1,5 +1,5 @@
 import { Button, Dropdown, Input, Form, Row, Col } from "antd";
-import { UnorderedListOutlined, LaptopOutlined, RightOutlined } from "@ant-design/icons";
+import { UnorderedListOutlined, LaptopOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CartMini from "../../components/CartMini";

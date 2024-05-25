@@ -1,7 +1,7 @@
-import { get,del,patch } from "./base";
+import { get, del, patch } from "./base";
 
 export const get_user_info = async () => {
-    const result = await get('/user')
+    const result = await get('user')
     if (result != null) {
         const data = await result.json();
         return data;
@@ -18,12 +18,15 @@ export const get_user_info = async () => {
         }
     }
 }
-export const change_user_info = async (confirm_password,change_data) => {
+export const change_user_info = async (confirm_password, change_data) => {
     const data = {
-        "confirm_password" : confirm_password
+        "confirm_password": confirm_password,
+        "data": {
+            "password": change_data
+        }
     } // add change data here , even password
-    const result = await patch('/user',data)
-    if (result.ok) {
+    const result = await patch('user', data)
+    if (result) {
         return true;
     } else {
         return false;
@@ -31,9 +34,9 @@ export const change_user_info = async (confirm_password,change_data) => {
 }
 export const delete_user = async (confirm_password) => {
     const data = {
-        "confirm_password" : confirm_password
+        "confirm_password": confirm_password
     }
-    const result = await del('/user',data)
+    const result = await del('user', data)
     if (result.ok) {
         return true;
     } else {

@@ -8,14 +8,19 @@ function ProductRecommend(props) {
     const navigate = useNavigate();
     const [recommend, setRecommend] = useState([]);
     const fetchAPI = async () => {
-        const response = await recommendProduct(id);
-        console.log(response);
-        setRecommend(response);
+        try {
+            const response = await recommendProduct(id);
+            if (response.length > 0) {
+                setRecommend(response);
+            }
+        } catch (error) {
+            console.error("Failed to fetch recommendations:", error);
+        }
     }
 
     useEffect(() => {
         fetchAPI();
-    }, []);
+    }, [id]);
 
     const ToDetail = (id) => {
         navigate(`/product/${id}`);

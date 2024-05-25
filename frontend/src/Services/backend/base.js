@@ -2,15 +2,21 @@ import { getCookie } from "../helpers/cookie";
 const API_DOMAIN = "http://localhost:8000/"; // đổi tại đây
 
 export const get = async (path) => {
-    const response = await fetch(API_DOMAIN + path,{
-        method: "GET",
-        headers: {
-            "Token" : getCookie('token')
+    try {
+        const response = await fetch(API_DOMAIN + path, {
+            method: "GET",
+            headers: {
+                "Token": getCookie('token')
+            }
+        });
+        if (response.ok) {
+            return response;
+        } else {
+            console.error("Server responded with an error:", response.status, response.statusText);
+            return null;
         }
-    });
-    if (response.ok) {
-        return response;
-    } else {
+    } catch (error) {
+        console.error("Failed to fetch data from API:", error);
         return null;
     }
 };
