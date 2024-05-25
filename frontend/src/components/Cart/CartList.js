@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import "./CartList.scss";
 import CartItem from "./CartItem";
 import { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ function CartList(props) {
         }
 
         fetchAPI();
-    }, []);
+    }, [cart]);
 
     return (
         <>

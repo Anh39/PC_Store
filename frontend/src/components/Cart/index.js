@@ -30,8 +30,7 @@ function Cart() {
         if (response) {
             setReload(!reload);
             fetchAPI();
-        } else {
-
+            setCart([]);
         }
     }
 
@@ -39,7 +38,7 @@ function Cart() {
 
     useEffect(() => {
         fetchAPI();
-    }, [total]);
+    }, [total, cart]);
 
     const handleReload = () => {
         fetchAPI();
