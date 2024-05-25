@@ -23,7 +23,7 @@ function Header(props) {
         // navigate(`/search?keyword=${values.keyword || ''}`);
         const response = await getSearch(values.keyword.toUpperCase());
         console.log(response);
-        navigate(`/search/${values.keyword || ''}`);    
+        navigate(`/search/${values.keyword || ''}`);
     }
 
     useEffect(() => {
@@ -75,15 +75,19 @@ function Header(props) {
 
                 <div className="header__button">
                     {token ? (<>
-                        <div className="header__cart">
-                            <CartMini />
-                        </div>
-                        <Personal />
+                        {token === 'admin-token' ? (
+                            <Button className="header__button--login" type="primary">
+                                <Link to="/admin">Quản lí</Link>
+                            </Button>
+                        ) : (
+                            <>
+                                <div className="header__cart">
+                                    <CartMini />
+                                </div>
+                                <Personal />
+                            </>
+                        )}
                     </>) : (<>
-
-                        <Button className="header__button--login" type="primary">
-                            <Link to="/admin">Quản lí</Link>
-                        </Button>
                         <Button className="header__button--login" type="primary">
                             <Link to="/login">Đăng nhập</Link>
                         </Button>
