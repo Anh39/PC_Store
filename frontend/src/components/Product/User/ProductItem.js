@@ -3,6 +3,7 @@ import { addToCart } from "../../../actions/cart";
 import { Link, useNavigate } from "react-router-dom";
 import "./DisplayProduct.scss";
 import { Button } from "antd";
+import { addProductToCart } from "../../../Services/backend/cart";
 
 function ProductItem(props) {
     const { item } = props;
@@ -11,11 +12,13 @@ function ProductItem(props) {
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cartReducer);
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (cart.some(itemCart => itemCart.id === item.id)) {
-            // dispatch(updateQuantity(item.id));
+            alert("sản phẩm đã được thêm vào giỏ từ trước");
         } else {
             dispatch(addToCart(item.id, item));
+            const response = await addProductToCart(item.id);
+            console.log(response);
         }
     }
 

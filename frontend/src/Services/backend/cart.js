@@ -6,7 +6,7 @@ export const getCart = async () => {
         const data = await result.json();
         return data;
     } else {
-        return []
+        return null;
     }
 }
 export const addProductToCart = async (id) => { 
@@ -34,6 +34,15 @@ export const changeCartAmount = async (id,amount) => {
 }
 export const deleteCartProduct = async (id) => { 
     const result = await del(`cart/?id=${id}`)
+    if (result != null) {
+        return true
+    } else {
+        return false
+    }
+}
+
+export const deleteCartAll = async () => { 
+    const result = await del(`cart/?id=${-1}`)
     if (result != null) {
         return true
     } else {

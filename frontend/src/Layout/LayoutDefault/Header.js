@@ -63,7 +63,7 @@ function Header(props) {
                     </Dropdown>
 
                     <div className="header__logo">
-                        <Link to="/"><img src={logoElink} alt="logo"/></Link>
+                        <Link to="/"><img src={logoElink} alt="logo" /></Link>
                     </div>
                 </div>
 
@@ -83,10 +83,10 @@ function Header(props) {
                 </Form>
 
                 <div className="header__button">
-                    <div className="header__cart">
-                        <CartMini />
-                    </div>
                     {token ? (<>
+                        <div className="header__cart">
+                            <CartMini />
+                        </div>
                         <Personal />
                     </>) : (<>
 

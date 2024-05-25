@@ -1,43 +1,45 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteItem, updateQuantity } from "../../actions/cart";
 // import { useRef, useState } from "react";
 import { Button, InputNumber } from "antd";
+import { changeCartAmount, deleteCartProduct } from "../../Services/backend/cart";
+import { useEffect, useState } from "react";
 function CartItem(props) {
-    const { item } = props;
+    const { item, onReload } = props;
     const dispatch = useDispatch();
+    const cartRedux = useSelector(state => state.cartReducer);
 
-    // const handleDown = () => {
-    //     if (item.quantity > 1) {
-    //         dispatch(updateQuantity(item.id, -1));
-    //         inputRef.current.value = parseInt(inputRef.current.value) - 1;
-    //     }
-    // }
-
-    // const handleUp = () => {
-    //     dispatch(updateQuantity(item.id));
-    //     inputRef.current.value = parseInt(inputRef.current.value) + 1;
-    // }
-
-    const ChangeQuantity = (value) => {
-        dispatch(updateQuantity(item.id, value));
+    const ChangeQuantity = async (value) => {
+        // dispatch(updateQuantity(item.id, value));
+        const response = await changeCartAmount(item.id, value);
+        console.log(response);
+        onReload();
     }
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         dispatch(deleteItem(item.id));
+        const response = await deleteCartProduct(item.id);
+        console.log(response);
+        onReload();
     }
+
+    useEffect(() => {
+        onReload();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cartRedux]);
 
     return (
         <>
-            <div className="cart__item" key={item.info.id}>
+            <div className="cart__item" key={item.id}>
                 <div className="cart__image">
-                    <img src={item.info.thumbnail} alt={item.info.title} />
+                    <img src={item.thumbnail} alt={item.name} />
                 </div>
                 <div className="cart__content">
-                    <h4 className="cart__tilte">{item.info.name}</h4>
-                    <div className="cart__price-new">{item.info.price}đ</div>
+                    <h4 className="cart__tilte">{item.name}</h4>
+                    <div className="cart__price-new">{item.price}đ</div>
                 </div>
                 <div className="cart__quantity">
-                    <InputNumber min={1} defaultValue={1} onChange={ChangeQuantity} />
+                    <InputNumber min={1} defaultValue={item.amount} onChange={ChangeQuantity} />
                 </div>
                 <Button onClick={handleDelete}>Xóa</Button>
             </div>

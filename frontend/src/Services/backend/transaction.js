@@ -5,7 +5,7 @@ export const createTransaction = async () => {
     if (result != null) {
         const data = await result.json();
         const redirect_url = data.approval_url; // chuyển đến link này
-        return data;
+        return redirect_url;
     } else {
         return []
     }
