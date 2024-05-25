@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CartMini from "../../components/CartMini";
 import { useEffect, useState } from "react";
-import { getCategoryList } from "../../Services/backend/product";
+import { getCategoryList, getSearch } from "../../Services/backend/product";
 import Personal from "../../components/Personal";
 import logoElink from "../../images/logo-elink.png";
 
@@ -18,9 +18,12 @@ function Header(props) {
     const [items, setItems] = useState([]);
 
 
-    const handleFinish = (values) => {
+    const handleFinish = async (values) => {
         console.log(values);
-        navigate(`/search?keyword=${values.keyword || ''}`);
+        // navigate(`/search?keyword=${values.keyword || ''}`);
+        const response = await getSearch(values.keyword.toUpperCase());
+        console.log(response);
+        navigate(`/search/${values.keyword || ''}`);    
     }
 
     useEffect(() => {

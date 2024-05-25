@@ -1,33 +1,30 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { getProductList } from "../../Services/productService";
+import { useParams, useSearchParams } from "react-router-dom";
+import { getSearch } from "../../Services/backend/product";
 import { Tag } from "antd";
 import SearchList from "./SearchList";
 import "../Product/User/DisplayProduct.scss";
+import ProductItem from "../Product/User/ProductItem";
 
 function Search() {
+    const { keyword } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     const [data, setData] = useState();
     const keywordSearch = searchParams.get("keyword") || '';
 
     const fetchAPI = async () => {
-        const response = await getProductList();
+        const response = await getSearch(keyword.toUpperCase());
         if (response) {
-            const newData = response.filter((item) => {
-                const keyword = item.title.toLowerCase();
-                const searchKeyword = keywordSearch.toLowerCase();  
-                return keyword.includes(searchKeyword);
-            });
-            setData(newData);
+            setData(response);
         }
 
     };
 
     useEffect(() => {
         fetchAPI();
-    }, []);
+    }, [keyword]);
 
     const Reload = () => {
         fetchAPI();
@@ -37,10 +34,13 @@ function Search() {
         <>
             <div>
                 <strong>Kết quả tìm kiếm:</strong>
-                {keywordSearch && <Tag>{keywordSearch}</Tag>}
             </div>
             {data && (
-                <SearchList data={data} onReload={Reload}/>
+                <div className="product">
+                    {data && (data.map((item, index) => (
+                        <ProductItem item={item} />
+                    )))}
+                </div>
             )}
         </>
     )

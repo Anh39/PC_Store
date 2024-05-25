@@ -42,7 +42,7 @@ export const routes = [
                 element: <Logout />
             },
             {
-                path: "/search",
+                path: "/search/:keyword",
                 element: <Search />
             },
             {
