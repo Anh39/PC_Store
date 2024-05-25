@@ -104,12 +104,6 @@ export const getCategoryProduct = async (option) => {
 }
 export const createProduct = async (option) => {
     let data = option
-    data['images'] = [
-        {
-            'path' : option.thumbnail,
-            'order' : 0
-        }
-    ]
     for (let i=0;i<option.basic_infos.length;i++) {
         option[`basic_info_${i}`] = option.basic_infos[i]
     }
@@ -120,7 +114,7 @@ export const createProduct = async (option) => {
             'order' : i
         }
     }
-
+    data['thumbnail'] = data.images[0].path
     const result = await post('product',data)
     if (result != null) {
        const id = await result.text()
