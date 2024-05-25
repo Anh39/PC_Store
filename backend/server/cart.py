@@ -13,7 +13,7 @@ class CartManager:
         self.cart_api = CartDBAPI()
         self.cart_api.start()
         self.validator : UserValidator = validator
-    async def get_cart(self,token : str = get_token(None)) : # completed
+    async def get_cart(self,token : str = get_token()) : # completed
         result = await self.cart_api.get_cart(
             token=token
         )

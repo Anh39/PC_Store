@@ -103,16 +103,20 @@ class Post(BaseModel):
         )
         return result
 
+class OrderInfo(BaseModel):
+    address : str | None
+    phone : str | None
+
 class Order(BaseModel):
     id : int
-    items : list['OrderItem']
-    status : str
-    time_created : str
-    time_completed : str
-    value : float
-    address : str
-    phone : str
-    user_id : int
+    items : list[dict] | None
+    status : str | None
+    time_created : str | None
+    time_completed : str | None
+    value : float | None
+    address : str | None
+    phone : str | None
+    user_id : int | None
     @classmethod
     def get_test(cls):
         result = Order(
